@@ -15,6 +15,7 @@
         flat
         :icon="outlinedQueueMusic"
         class="text-dark q-mx-sm"
+        @click="gotoQueuePage"
       >
         <q-tooltip>Queue</q-tooltip>
       </q-btn>
@@ -61,12 +62,20 @@ import { matRadio } from '@quasar/extras/material-icons';
 import { inject, ref, watch } from 'vue';
 import RadioService from 'src/services/domain/RadioService';
 import AudioService from 'src/services/domain/AudioService';
+import { useRouter } from 'vue-router';
 
 // Injected props
+const $router = useRouter();
 const radioService = inject<RadioService>('radioService');
 const audioService = inject<AudioService>('audioService');
 
 const volume = ref(1);
+
+const gotoQueuePage = () => {
+  $router.push({
+    name: 'Queue'
+  });
+};
 
 // Watch volume changes
 watch(volume, (newVolume) => {
