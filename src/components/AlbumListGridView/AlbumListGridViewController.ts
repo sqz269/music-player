@@ -48,9 +48,6 @@ export default function useAlbumListGridViewController(
       ...inputModel.value,
       page,
     };
-
-    // console.log('Controller Loading due to changePage call');
-    // await load(inputModel.value);
   };
 
   const changeSortOrder = async (sortOrder: SortOrder) => {
@@ -58,9 +55,6 @@ export default function useAlbumListGridViewController(
       ...inputModel.value,
       sortOrder,
     };
-
-    // console.log('Controller Loading due to changeSortOrder call');
-    // await load(inputModel.value);
   };
 
   const changeSortField = async (sortField: AlbumOrderOptions) => {
@@ -68,20 +62,12 @@ export default function useAlbumListGridViewController(
       ...inputModel.value,
       sortField,
     };
-
-    // console.log('Controller Loading due to changeSortField call');
-    // await load(inputModel.value);
   };
 
   watch(
     inputModel,
     async (newInputModel, oldInputModel) => {
-      if (isEqual(newInputModel, oldInputModel)) {
-        return;
-      }
-      console.log('Controller Loading due to inputModel change');
-      console.dir(newInputModel);
-      console.dir(oldInputModel);
+      console.dir({ newInputModel, oldInputModel });
       await load(newInputModel);
     },
     {

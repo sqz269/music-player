@@ -17,7 +17,7 @@ import useAlbumListGridViewController, {
 import AlbumListGridViewViewModel from 'src/components/AlbumListGridView/models/AlbumListGridViewViewModel';
 import ApiConfigurationProvider from 'src/services/domain/ApiConfigurationProvider';
 import Logger from 'src/utils/Logger';
-import { inject, onBeforeMount, watch } from 'vue';
+import { inject, onBeforeMount, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 const $router = useRouter();
@@ -28,6 +28,8 @@ if (!apiConfigProvider) {
 }
 const logger = Logger.getLogger('HomePage');
 let controller: AlbumListGridViewController | null = null;
+
+const isUpdateChildInitiated = ref(false);
 
 onBeforeMount(() => {
   const pageParam = $router.currentRoute.value.params.page;
@@ -73,6 +75,10 @@ onBeforeMount(() => {
     (newValue, oldValue) => {
       logger.info(`Page changed from ${oldValue} to ${newValue}`);
 
+      if (isUpdateChildInitiated.value) {
+        isUpdateChildInitiated.value = false;
+        return;
+      }
       controller?.changePage(parseInt(newValue as string));
     }
   );
@@ -80,6 +86,8 @@ onBeforeMount(() => {
   watch(
     () => controller!.viewModelController.state.value?.currentPage,
     (newValue, oldValue) => {
+      isUpdateChildInitiated.value = true;
+
       logger.info(`Page changed from ${oldValue} to ${newValue}`);
 
       $router.push({
