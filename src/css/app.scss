@@ -1,0 +1,12 @@
+// app global css in SCSS form
+.underlined {
+  text-decoration: underline !important;
+}
+
+.link {
+  cursor: pointer;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
