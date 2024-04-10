@@ -107,7 +107,7 @@ import TrackListTable from 'src/components/AlbumPage/TrackListTable.vue';
 import { QCard } from 'quasar';
 
 // View Models
-interface AlbumPageRouteParamters {
+interface AlbumPageRouteParameters {
   albumId: ComputedRef<string>;
 }
 

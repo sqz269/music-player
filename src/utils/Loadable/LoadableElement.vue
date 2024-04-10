@@ -1,13 +1,7 @@
 <template>
-  <div v-if="props.stateController.status.value === LoadingStatus.Loading">
-    <slot name="loading" />
-  </div>
-  <div v-else-if="props.stateController.status.value === LoadingStatus.Error">
-    <slot name="error" :error="props.stateController.error.value" />
-  </div>
-  <div v-else-if="props.stateController.status.value === LoadingStatus.Success">
-    <slot :data="props.stateController.state.value" />
-  </div>
+  <slot v-if="props.stateController.status.value === LoadingStatus.Loading" name="loading" />
+  <slot v-else-if="props.stateController.status.value === LoadingStatus.Error" name="error" :error="props.stateController.error.value" />
+  <slot v-else-if="props.stateController.status.value === LoadingStatus.Success" :data="props.stateController.state.value" />
   <div v-else>NOT LOADED</div>
 </template>
 

@@ -109,6 +109,27 @@ export default function useApiOndemandPlaylistService(
     await _update();
   };
 
+  const getPlaylist = async (id: string): Promise<PlaylistReadDto | null> => {
+    if (!isReady.value) {
+      _logger.error('getPlaylist called before initialization');
+      return null;
+    }
+
+    const playlistApi = new PlaylistApi(
+      _apiConfigProvider.getApiConfigurationWithAuth()
+    );
+
+    const playlist = await playlistApi.getPlaylistById({
+      playlistId: id,
+    });
+    if (!playlist) {
+      _logger.error(`Playlist with id ${id} not found`);
+      return null;
+    }
+
+    return playlist;
+  }
+
   const createPlaylist = async (
     name: string,
     visibility?: PlaylistVisibility
@@ -249,45 +270,18 @@ export default function useApiOndemandPlaylistService(
       _apiConfigProvider.getApiConfigurationWithAuth()
     );
 
-    const map = new Map<string, boolean>();
-    trackIds.forEach((trackId) => {
-      map.set(trackId, false);
+    const result = await playlistItemsApi.isTrackInPlaylist({
+      playlistId: playlistId,
+      requestBody: trackIds,
     });
-
-    // TODO: implement this method in the backend
-    // For now, we just going to retrieve all playlist
-    // items and check if the track is in the playlist
-    let offset = 0;
-    while (true) {
-      const items = await playlistItemsApi.getPlaylistItems({
-        playlistId: playlistId,
-        start: offset,
-        limit: 50,
-      });
-      _logger.info(`Fetched ${items.length} items from playlist ${playlistId}`);
-
-      if (items === undefined || items.length === 0) {
-        break;
-      }
-      items.forEach((item) => {
-        if (map.has(item.trackId!)) {
-          map.set(item.trackId!, true);
-        }
-      });
-
-      if (items.length < 50) {
-        break;
-      }
-      offset += items.length;
-    }
 
     _logger.info(
       `Tracks in playlist ${playlistId}: ${JSON.stringify(
-        Object.fromEntries(map)
+        result
       )}`
     );
 
-    return map;
+    return new Map(Object.entries(result));
   };
 
   const isTrackInPlaylist = async (
@@ -304,6 +298,7 @@ export default function useApiOndemandPlaylistService(
     history,
     queue,
     initialize,
+    getPlaylist,
     createPlaylist,
     updatePlaylist,
     deletePlaylist,

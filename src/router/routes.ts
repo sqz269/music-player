@@ -29,6 +29,11 @@ const routes: RouteRecordRaw[] = [
         name: 'CircleAlbums',
         component: () => import('pages/CirclePage.vue'),
       },
+      {
+        path: 'playlist/:playlistId',
+        name: 'Playlist',
+        component: () => import('pages/PlaylistPage.vue'),
+      }
     ],
   },
 

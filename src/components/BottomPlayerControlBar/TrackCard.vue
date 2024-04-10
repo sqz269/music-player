@@ -10,7 +10,7 @@
         <div class="text-dark text-h6">
           {{ currentTrack.name }}
         </div>
-        <div class="text-dark text-subtitle2 link">
+        <div class="text-dark text-subtitle2 link" @click="gotoAlbum(currentTrack!.albumId)">
           {{ currentTrack.albumName }}
         </div>
         <div class="row">
@@ -19,6 +19,7 @@
               class="text-dark text-subtitle1 text-bold cursor-pointer artist-name"
               v-for="(circle, index) in currentTrack.circle"
               :key="index"
+              @click="gotoCircle(circle.id)"
             >
               {{ circle.name }}
             </span>
@@ -64,8 +65,10 @@ import { computed, ComputedRef, inject, Ref, watch } from 'vue';
 import PlaylistService from 'src/services/domain/PlaylistService';
 import useChangeableController from 'src/utils/Changeable/Changeable';
 import QueuedTrack from 'src/models/QueuedTrack';
+import { useRouter } from 'vue-router';
 
 // Injected services/data
+const $router = useRouter();
 const queueService = inject<QueueService>('queueService');
 if (queueService === undefined) {
   throw new Error('Queue Service not found');
@@ -114,6 +117,20 @@ const onFavIconClick = async () => {
   }
 
   isCurrentTrackInFavoritePlaylistChangeableController.reload();
+};
+
+const gotoCircle = (circleId: string) => {
+  $router.push({
+    name: 'CircleAlbums',
+    params: { circleId: circleId.toString(), page: '1' },
+  });
+};
+
+const gotoAlbum = (albumId: string) => {
+  $router.push({
+    name: 'Album',
+    params: { albumId: albumId.toString() },
+  });
 };
 </script>
 

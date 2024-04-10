@@ -38,6 +38,11 @@ export interface GetPlaylistItemsRequest {
     limit?: number;
 }
 
+export interface IsTrackInPlaylistRequest {
+    playlistId: string;
+    requestBody?: Array<string>;
+}
+
 /**
  * 
  */
@@ -170,6 +175,48 @@ export class PlaylistItemsApi extends runtime.BaseAPI {
      */
     async getPlaylistItems(requestParameters: GetPlaylistItemsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<PlaylistItemReadDto>> {
         const response = await this.getPlaylistItemsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async isTrackInPlaylistRaw(requestParameters: IsTrackInPlaylistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<{ [key: string]: boolean; }>> {
+        if (requestParameters['playlistId'] == null) {
+            throw new runtime.RequiredError(
+                'playlistId',
+                'Required parameter "playlistId" was null or undefined when calling isTrackInPlaylist().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json-patch+json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/playlists/{playlistId}/contains`.replace(`{${"playlistId"}}`, encodeURIComponent(String(requestParameters['playlistId']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['requestBody'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     */
+    async isTrackInPlaylist(requestParameters: IsTrackInPlaylistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: boolean; }> {
+        const response = await this.isTrackInPlaylistRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

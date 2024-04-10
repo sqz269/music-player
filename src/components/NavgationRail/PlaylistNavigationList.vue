@@ -38,10 +38,11 @@
     <q-list>
       <q-item
         v-for="playlist in playlistService?.playlists.value"
-        :key="playlist.id"
-        v-ripple
         clickable
+        v-ripple
+        :key="playlist.id"
         :inset-level="0.3"
+        @click="gotoPlaylist(playlist.id!)"
       >
         <q-item-section avatar>
           <q-icon :name="outlinedPlaylistPlay" size="24px" />
@@ -68,17 +69,14 @@ import {
 import AuthenticationService from 'src/services/domain/AuthenticationService';
 import PlaylistService from 'src/services/domain/PlaylistService';
 import { inject } from 'vue';
+import { useRouter } from 'vue-router';
 
 // Injected services
+const $router = useRouter();
 const authService = inject<AuthenticationService>('authService');
 const playlistService = inject<PlaylistService>('playlistService');
 
 const collectionNavigations = [
-  {
-    text: 'Library',
-    icon: outlinedLibraryMusic,
-    route: { name: 'library' },
-  },
   {
     text: 'History',
     icon: outlinedHistory,
@@ -90,4 +88,8 @@ const collectionNavigations = [
     route: { name: 'favorite' },
   },
 ];
+
+const gotoPlaylist = (playlistId: string) => {
+  $router.push({ name: 'Playlist', params: { playlistId } });
+};
 </script>

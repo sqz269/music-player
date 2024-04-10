@@ -14,6 +14,9 @@ export default interface PlaylistService {
   playlists: DeepReadonly<Ref<PlaylistReadDto[]>>;
 
   initialize: () => Promise<void>;
+  getPlaylist: (
+    id: string
+  ) => Promise<PlaylistReadDto | null>;
   createPlaylist: (
     name: string,
     visibiltiy?: PlaylistVisibility

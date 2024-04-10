@@ -1,9 +1,6 @@
 <template>
   <div v-if="authService?.isInitialized.value">
-    <q-btn
-      v-if="!authService?.isAuthenticated.value"
-      @click="authService?.login"
-    >
+    <q-btn v-if="!authService?.isAuthenticated.value" @click="authService?.login">
       Login
     </q-btn>
 
@@ -30,7 +27,7 @@
         </q-item>
       </q-list>
     </q-btn-dropdown>
-    <q-btn @click="authService?.refreshAccessToken">Refresh Token</q-btn>
+    <q-btn @click="showAccessTokenAsBearer">Reveal Auth Token</q-btn>
   </div>
 
   <span v-else><q-spinner /> Initializing Authentication</span>
@@ -46,5 +43,19 @@ const authService = inject<AuthenticationService>('authService');
 
 const onAccountDropdownClick = (evt: Event) => {
   console.log('Item clicked', evt);
+};
+
+const setClipboard = (text: string) => {
+  navigator.clipboard.writeText(text);
+};
+
+const showAccessTokenAsBearer = () => {
+  authService?.refreshAccessToken().then(() => {
+    const bearer = `${authService?.getAccessToken()}`;
+    // alert(bearer);
+    setClipboard(bearer);
+  }, (error) => {
+    console.error('Error refreshing access token', error);
+  });
 };
 </script>
