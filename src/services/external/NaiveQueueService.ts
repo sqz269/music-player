@@ -1,6 +1,6 @@
 import QueuedTrack from 'src/models/QueuedTrack';
 import AudioService from '../domain/AudioService';
-import QueueService, { RepeatMode } from '../domain/QueueService';
+import QueueService, { QueueAddMode, RepeatMode } from '../domain/QueueService';
 import { DeepReadonly, readonly, Ref, ref, watch } from 'vue';
 import Logger from 'src/utils/Logger';
 import ApiConfigurationProvider from '../domain/ApiConfigurationProvider';
@@ -86,8 +86,7 @@ export default function useNaiveQueueService(
         _currentTrack.value!.track.id!
       );
       _logger.info(
-        `Current track is ${
-          _isCurrentTrackInFavorite.value ? '' : 'not '
+        `Current track is ${_isCurrentTrackInFavorite.value ? '' : 'not '
         }in favorite playlist`
       );
     }
@@ -99,18 +98,19 @@ export default function useNaiveQueueService(
 
   const _addTracks = async (
     tracks: QueuedTrack[],
-    playImmediately = false,
-    position: number | undefined
+    addMode?: QueueAddMode,
+    position?: number,
   ) => {
+    _logger.info(`Params: ${position}, ${addMode}`)
     if (tracks.length === 0) {
       _logger.warn('No tracks to add');
       return 0;
     }
 
     _logger.info(`Adding ${tracks.length} tracks to queue`);
-    if (position !== undefined && playImmediately) {
+    if (position !== undefined && addMode) {
       _logger.error(
-        'Cannot play immediately and specify position at the same time'
+        'Cannot specify an add mode and position at the same time'
       );
 
       return 0;
@@ -126,23 +126,32 @@ export default function useNaiveQueueService(
       return 0;
     }
 
-    if (playImmediately) {
-      _queue.value.splice(_currentIndex.value! + 1, 0, ...tracks);
-      _logger.info('Added tracks to play immediately');
-      await playNext();
-    } else if (position !== undefined) {
+    if (position) {
+      _logger.info(`Adding tracks at position ${position}`);
+
       _queue.value.splice(position, 0, ...tracks);
-      _logger.info(`Added tracks at position ${position}`);
-    } else {
-      _queue.value.push(...tracks);
-      _logger.info('Added tracks to the end of the queue');
+      return tracks.length;
     }
 
-    if (
-      currentIndex.value === null ||
-      currentIndex.value >= _queue.value.length
-    ) {
-      // PlayNext
+    if (!addMode) {
+      _logger.info('No add mode or position specified, appending tracks to the end of the queue');
+      addMode = QueueAddMode.APPEND_LAST;
+    }
+
+    if (addMode & QueueAddMode.APPEND_LAST) {
+      _logger.info('Appending tracks to the end of the queue');
+      _queue.value.push(...tracks);
+    }
+
+    if (addMode & QueueAddMode.APPEND_NEXT) {
+      _logger.info('Appending tracks to the beginning of the queue');
+      _queue.value.unshift(...tracks);
+    }
+
+    if (addMode & QueueAddMode.SKIP_CURRENT) {
+      if (_currentIndex.value !== null) {
+        playNext();
+      }
     }
 
     return tracks.length;
@@ -150,9 +159,9 @@ export default function useNaiveQueueService(
 
   const addTracksByIds = async (
     trackIds: string[],
-    playImmediately?: boolean,
+    addMode?: QueueAddMode,
+    position?: number,
     group?: string,
-    position?: number
   ) => {
     _logger.info(`Adding tracks by ids: ${trackIds.join(', ')}`);
 
@@ -189,15 +198,16 @@ export default function useNaiveQueueService(
       return new QueuedTrack(track, null, group);
     });
 
-    return _addTracks(queuedTracks!, playImmediately, position);
+    _logger.info(`Adding track with addMode: ${addMode}, position: ${position}`);
+    return _addTracks(queuedTracks!, addMode, position);
   };
   const addTrackById = async (
     trackId: string,
-    playImmediately?: boolean,
+    addMode?: QueueAddMode,
+    position?: number,
     group?: string,
-    position?: number
   ) => {
-    return addTracksByIds([trackId], playImmediately, group, position);
+    return addTracksByIds([trackId], addMode, position, group);
   };
 
   const removeTrackByIndex = (index: number) => {

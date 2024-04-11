@@ -7,6 +7,14 @@ export enum RepeatMode {
   ALL = 'all',
 }
 
+export enum QueueAddMode {
+  APPEND_NEXT = 0b1,
+  APPEND_LAST = 0b10,
+  SKIP_CURRENT = 0b100,
+
+  PLAY_IMMEDIATELY = APPEND_NEXT | SKIP_CURRENT,
+}
+
 export default interface QueueService {
   queue: DeepReadonly<Ref<QueuedTrack[]>>;
 
@@ -26,14 +34,14 @@ export default interface QueueService {
 
   addTracksByIds(
     trackIds: string[],
-    playImmediately?: boolean,
+    addMode?: QueueAddMode,
+    position?: number,
     group?: string,
-    position?: number
   ): Promise<number>;
 
   addTrackById(
     trackId: string,
-    playImmediately?: boolean,
+    addMode?: QueueAddMode,
     group?: string,
     position?: number
   ): Promise<number>;

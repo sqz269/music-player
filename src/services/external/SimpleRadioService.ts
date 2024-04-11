@@ -1,5 +1,5 @@
 import { readonly, ref, watch } from 'vue';
-import QueueService from '../domain/QueueService';
+import QueueService, { QueueAddMode } from '../domain/QueueService';
 import RadioService from '../domain/RadioService';
 import Logger from 'src/utils/Logger';
 import ApiConfigurationProvider from '../domain/ApiConfigurationProvider';
@@ -45,7 +45,7 @@ export default function useSimpleRadioService(
 
     if (trackIds.length > 0) {
       _logger.debug(`Adding ${trackIds.length} tracks to the queue`);
-      _queueService.addTracksByIds(trackIds, false, 'radio');
+      _queueService.addTracksByIds(trackIds, QueueAddMode.APPEND_LAST);
     }
   };
 
