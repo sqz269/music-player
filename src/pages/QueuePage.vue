@@ -1,7 +1,8 @@
 <template>
   <q-page>
-    <q-list bordered v-if="queueService">
-      <q-item clickable
+    <q-list v-if="queueService">
+      <q-item
+        clickable
         v-for="(queueItem, index) in transformedQueueItems"
         :key="queueItem.id"
         :active="queueService.currentIndex.value === index"
@@ -11,14 +12,24 @@
           <q-item-label>{{ index + 1 }}</q-item-label>
         </q-item-section>
         <q-item-section avatar>
-          <q-avatar rounded size="58px">
+          <q-avatar
+            rounded
+            size="58px"
+          >
             <img :src="queueItem.track.thumbnails?.small">
           </q-avatar>
         </q-item-section>
         <q-item-section>
           <q-item-label class="text-subtitle1">{{ queueItem.track.name }}</q-item-label>
-          <q-item-label caption lines="1" class="text-bold">{{ queueItem.track.albumName }}</q-item-label>
-          <q-item-label caption lines="1">{{ queueItem.track.circle.map(c => c.name).join(', ') }}</q-item-label>
+          <q-item-label
+            caption
+            lines="1"
+            class="text-bold"
+          >{{ queueItem.track.albumName }}</q-item-label>
+          <q-item-label
+            caption
+            lines="1"
+          >{{ queueItem.track.circle.map(c => c.name).join(', ') }}</q-item-label>
         </q-item-section>
       </q-item>
     </q-list>
