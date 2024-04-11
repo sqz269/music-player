@@ -2809,6 +2809,10 @@
           "large": {
             "type": "boolean"
           },
+          "size": {
+            "type": "integer",
+            "format": "int64"
+          },
           "url": {
             "type": "string",
             "nullable": true

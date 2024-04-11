@@ -17,15 +17,27 @@
               :icon="outlinedPlayArrow"
               color="black"
               text-color="white"
+              @click="playAlbum(data!, QueueAddMode.PLAY_IMMEDIATELY)"
             >
               <q-tooltip>Play</q-tooltip>
 
-              <q-menu touch-position context-menu>
+              <q-menu
+                touch-position
+                context-menu
+              >
                 <q-list style="min-width: 150px">
-                  <q-item clickable v-close-popup>
+                  <q-item
+                    clickable
+                    v-close-popup
+                    @click="playAlbum(data!, QueueAddMode.APPEND_NEXT)"
+                  >
                     <q-item-section>Play Next</q-item-section>
                   </q-item>
-                  <q-item clickable v-close-popup>
+                  <q-item
+                    clickable
+                    v-close-popup
+                    @click="playAlbum(data!, QueueAddMode.APPEND_LAST)"
+                  >
                     <q-item-section>Add to Queue</q-item-section>
                   </q-item>
                 </q-list>
@@ -42,20 +54,43 @@
               <q-tooltip>Save</q-tooltip>
             </q-btn>
 
-            <q-btn fab flat class="q-mx-md" round :icon="outlinedMoreHoriz">
-              <q-menu fit anchor="center middle" self="top middle">
+            <q-btn
+              fab
+              flat
+              class="q-mx-md"
+              round
+              :icon="outlinedMoreHoriz"
+            >
+              <q-menu
+                fit
+                anchor="center middle"
+                self="top middle"
+              >
                 <q-list>
-                  <q-item clickable v-close-popup>
+                  <q-item
+                    clickable
+                    v-close-popup
+                    @click="showAlbumAssetDialog(data!.masterAlbum)"
+                  >
                     <q-item-section avatar>
-                      <q-avatar :icon="outlinedDescription" />
+                      <q-avatar
+                        :icon="outlinedDescription"
+                        size="lg"
+                      />
                     </q-item-section>
-                    <q-item-section>View Full Metadata</q-item-section>
+                    <q-item-section>View Other Assets</q-item-section>
                   </q-item>
-                  <q-item clickable v-close-popup>
+                  <q-item
+                    clickable
+                    v-close-popup
+                  >
                     <q-item-section avatar>
-                      <q-avatar :icon="outlinedTipsAndUpdates" />
+                      <q-avatar
+                        :icon="outlinedEditNote"
+                        size="lg"
+                      />
                     </q-item-section>
-                    <q-item-section>Suggest an Edit</q-item-section>
+                    <q-item-section>Attribute Editor</q-item-section>
                   </q-item>
                 </q-list>
               </q-menu>
@@ -67,7 +102,10 @@
       </template>
 
       <template #error="{ error }">
-        <q-card class="q-ma-md" style="max-width: 400px">
+        <q-card
+          class="q-ma-md"
+          style="max-width: 400px"
+        >
           <q-card-section>
             <q-card-title class="text-h6">Error</q-card-title>
             <q-card-main>
@@ -92,7 +130,7 @@ import {
   outlinedMoreHoriz,
   outlinedFavoriteBorder,
   outlinedDescription,
-  outlinedTipsAndUpdates,
+  outlinedEditNote
 } from '@quasar/extras/material-icons-outlined';
 import { AlbumReadDto, AlbumApi } from 'app/backend-service-api';
 import { Configuration } from 'app/backend-service-api';
@@ -104,7 +142,9 @@ import LoadableElement from 'src/utils/Loadable/LoadableElement.vue';
 import { TrackReadDto } from 'app/backend-service-api';
 import AlbumInfoSection from 'src/components/AlbumPage/AlbumInfoSection.vue';
 import TrackListTable from 'src/components/AlbumPage/TrackListTable.vue';
-import { QCard } from 'quasar';
+import { QCard, useQuasar } from 'quasar';
+import AlbumAssetsViewerDialog from 'src/components/Dialogs/AlbumAssetsViewerDialog.vue';
+import QueueService, { QueueAddMode } from 'src/services/domain/QueueService';
 
 // View Models
 interface AlbumPageRouteParameters {
@@ -125,11 +165,13 @@ const apiConfigProvider =
 if (!apiConfigProvider) {
   throw new Error('API configuration provider not found');
 }
-const router = useRouter();
+const $q = useQuasar();
+const $router = useRouter();
 const routeParams = {
-  albumId: computed(() => router.currentRoute.value.params.albumId),
+  albumId: computed(() => $router.currentRoute.value.params.albumId),
 };
 const controller = useLoadableController<AlbumPageViewModel>();
+const queueService = inject<QueueService>('queueService');
 
 const initializeViewModelSingleDisc = (
   master: AlbumReadDto
@@ -231,7 +273,7 @@ const load = async (albumId: string) => {
     if (isMultiDisc) {
       const isMaster = !album.parentAlbum && album.discNumber === 0;
       if (!isMaster) {
-        router.replace({
+        $router.replace({
           name: 'Album',
           params: { albumId: album.parentAlbum!.id! },
         });
@@ -250,6 +292,26 @@ const load = async (albumId: string) => {
     controller.setError(error as Error);
     throw error;
   }
+};
+
+const showAlbumAssetDialog = (album: AlbumReadDto) => {
+  $q.dialog(
+    {
+      component: AlbumAssetsViewerDialog,
+      componentProps: {
+        album,
+      }
+    }
+  );
+}
+
+const playAlbum = (viewModel: AlbumPageViewModel, addMode: QueueAddMode) => {
+  const tracks = Array.from(viewModel.tracks.values())
+    .reduce((acc, val) => acc.concat(val), []);
+
+  const trackIds = tracks.map((track) => track.id!);
+
+  queueService?.addTracksByIds(trackIds, addMode);
 };
 
 // bind hooks to update controller if the route changes

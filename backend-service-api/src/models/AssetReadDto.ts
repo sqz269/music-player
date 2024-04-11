@@ -45,6 +45,12 @@ export interface AssetReadDto {
     large?: boolean;
     /**
      * 
+     * @type {number}
+     * @memberof AssetReadDto
+     */
+    size?: number;
+    /**
+     * 
      * @type {string}
      * @memberof AssetReadDto
      */
@@ -72,6 +78,7 @@ export function AssetReadDtoFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'assetName': json['assetName'] == null ? undefined : json['assetName'],
         'assetMime': json['assetMime'] == null ? undefined : json['assetMime'],
         'large': json['large'] == null ? undefined : json['large'],
+        'size': json['size'] == null ? undefined : json['size'],
         'url': json['url'] == null ? undefined : json['url'],
     };
 }
@@ -86,6 +93,7 @@ export function AssetReadDtoToJSON(value?: AssetReadDto | null): any {
         'assetName': value['assetName'],
         'assetMime': value['assetMime'],
         'large': value['large'],
+        'size': value['size'],
         'url': value['url'],
     };
 }
