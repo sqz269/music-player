@@ -53,9 +53,6 @@ export default function useApiOndemandPlaylistService(
       _logger.error('Failed to fetch playlists');
       return;
     }
-
-    _playlists.value = playlists;
-
     const favorite = playlists.find(
       (playlist) => playlist.type === PlaylistType.Favorite
     );
@@ -76,6 +73,13 @@ export default function useApiOndemandPlaylistService(
     if (queue) {
       _queue.value = queue;
     }
+
+    // remove special playlist from playlists
+    const normalPlaylists = playlists.filter(
+      (playlist) =>
+        playlist.type === PlaylistType.Normal
+    );
+    _playlists.value = normalPlaylists;
 
     _logger.info('Playlists updated');
     _isReady.value = true;
