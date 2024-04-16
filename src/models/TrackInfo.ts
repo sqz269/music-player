@@ -3,7 +3,7 @@ import { Duration } from './Duration';
 import { ThumbnailReadDto } from 'app/backend-service-api';
 
 export class CircleInfo {
-  constructor(public id: string, public name: string) {}
+  constructor(public id: string, public name: string) { }
 
   public static fromCircleReadDto(dto: CircleReadDto): CircleInfo {
     return new CircleInfo(dto.id!, dto.name!);
@@ -17,7 +17,7 @@ export class Thumbnails {
     public medium: string,
     public large: string,
     public original: string
-  ) {}
+  ) { }
 
   public entries(): [string, string][] {
     return [
@@ -46,7 +46,7 @@ export class Thumbnails {
 
 export class TrackInfo {
   static trackAssetBaseUrl =
-    'https://api-music.marisad.me/api/asset/track/{id}';
+    'https://api.marisad.me/api/asset/track/{id}';
 
   constructor(
     public id: string,
@@ -57,7 +57,7 @@ export class TrackInfo {
     public duration: Duration,
     public audioUrl: string,
     public thumbnails: Thumbnails | null = null
-  ) {}
+  ) { }
 
   public static fromTrackReadDto(dto: TrackReadDto): TrackInfo {
     const circles =
@@ -72,8 +72,8 @@ export class TrackInfo {
       dto.name?._default || '',
       circles,
       dto.album!.id!,
-      dto.album?.albumName?._default || '',
-      Duration.fromDurationString(dto.duration!),
+      dto.album?.name?._default || '',
+      Duration.fromTimespan(dto.duration!),
       audioUrl!,
       Thumbnails.fromThumbnailsDto(dto.album?.thumbnail)
     );

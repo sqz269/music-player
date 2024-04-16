@@ -11,12 +11,13 @@
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev",
     "build": "quasar build",
-    "gen-client": "openapi-merge-cli && openapi-generator-cli.cmd generate -i .output.swagger.json -o backend-service-api -g typescript-fetch --additional-properties=npmName=backend-api-client --additional-properties=npmVersion=1.0.0 --additional-properties=supportsES6=true"
+    "gen-client": "openapi-generator-cli.cmd generate -i https://api.marisad.me/swagger/v1/swagger.json -o backend-service-api -g typescript-fetch --additional-properties=npmName=backend-api-client --additional-properties=npmVersion=1.0.0 --additional-properties=supportsES6=true"
   },
   "dependencies": {
     "@quasar/extras": "^1.16.4",
     "@types/lodash": "^4.17.0",
     "backend-api-client": "file:backend-service-api",
+    "date-fns": "^3.6.0",
     "hls.js": "^1.5.7",
     "keycloak-js": "^24.0.2",
     "lodash": "^4.17.21",

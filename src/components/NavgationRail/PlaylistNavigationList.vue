@@ -2,8 +2,14 @@
   <q-list v-if="!playlistService?.isReady.value">
     <q-item :inset-level="0.3">
       <div>
-        <a class="underlined link" @click="authService?.login">Log in</a> or
-        <a class="underlined link" @click="authService?.signup">Sign up</a>
+        <a
+          class="underlined link"
+          @click="authService?.login"
+        >Log in</a> or
+        <a
+          class="underlined link"
+          @click="authService?.signup"
+        >Sign up</a>
         to create and manage playlists
       </div>
     </q-item>
@@ -16,12 +22,15 @@
         v-ripple
         clickable
         :inset-level="0.3"
-        :to="link.route"
         exact
         active-class="text-white bg-grey-8 text-weight-bolder"
+        @click="link.onClick"
       >
         <q-item-section avatar>
-          <q-icon :name="link.icon" size="24px" />
+          <q-icon
+            :name="link.icon"
+            size="24px"
+          />
         </q-item-section>
         <q-item-section>
           <q-item-label>
@@ -45,7 +54,10 @@
         @click="gotoPlaylist(playlist.id!)"
       >
         <q-item-section avatar>
-          <q-icon :name="outlinedPlaylistPlay" size="24px" />
+          <q-icon
+            :name="outlinedPlaylistPlay"
+            size="24px"
+          />
         </q-item-section>
         <q-item-section>
           <q-item-label>
@@ -81,11 +93,17 @@ const collectionNavigations = [
     text: 'History',
     icon: outlinedHistory,
     route: { name: 'history' },
+    onClick: () => {
+      gotoPlaylist(playlistService!.history.value!.id!);
+    },
   },
   {
     text: 'Favorite',
     icon: outlinedFavoriteBorder,
     route: { name: 'favorite' },
+    onClick: () => {
+      gotoPlaylist(playlistService!.favorite.value!.id!);
+    },
   },
 ];
 

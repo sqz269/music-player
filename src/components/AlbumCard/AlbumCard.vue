@@ -1,5 +1,9 @@
 <template>
-  <q-card v-ripple class="album-card cursor-pointer" @click="navigateToAlbum">
+  <q-card
+    v-ripple
+    class="album-card cursor-pointer"
+    @click="navigateToAlbum"
+  >
     <q-img
       v-if="viewModel.albumCoverUrl"
       :src="viewModel.albumCoverUrl"
@@ -13,7 +17,10 @@
     <q-card-section>
       <div class="text-subtitle1">{{ viewModel.albumName }}</div>
       <div>
-        <span v-for="(artist, index) in viewModel.artistName" :key="index">
+        <span
+          v-for="(artist, index) in viewModel.artistName"
+          :key="index"
+        >
           {{ artist }}
           <span v-if="index < viewModel.artistName.length - 1">, </span>
         </span>
@@ -49,7 +56,7 @@ const $router = useRouter();
 const initializeViewModel = (): ComputedRef<AlbumCardViewModel> => {
   return computed(() => ({
     albumId: props.album.id!,
-    albumName: props.album.albumName?._default || '',
+    albumName: props.album.name?._default || '',
     artistName: props.album.albumArtist?.map((artist) => artist.name!) || [],
     albumCoverUrl: props.album.thumbnail?.large?.url || null,
     releaseDate: props.album.releaseDate || null,

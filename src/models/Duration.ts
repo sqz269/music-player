@@ -1,3 +1,5 @@
+import { TimeSpan } from "app/backend-service-api/src";
+
 export class Duration {
   private _duration: number;
 
@@ -43,5 +45,9 @@ export class Duration {
   public static fromDurationString(durationString: string): Duration {
     const [hours, minutes, seconds] = durationString.split(':').map(Number);
     return new Duration(hours * 3600 + minutes * 60 + seconds);
+  }
+
+  public static fromTimespan(timespan: TimeSpan): Duration {
+    return new Duration(timespan.seconds!);
   }
 }

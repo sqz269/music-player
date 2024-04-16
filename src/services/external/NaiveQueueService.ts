@@ -306,7 +306,7 @@ export default function useNaiveQueueService(
     _currentTrack.value = _queue.value[index];
     // // FIXME: trackFile?.url is deprecated, Use asset endpoint instead
     // // /api/asset/track/{trackId}
-    const url = `https://api-music.marisad.me/api/asset/track/${_currentTrack.value.track.id}`;
+    const url = `https://api.marisad.me/api/asset/track/${_currentTrack.value.track.id}`;
     if (url) {
       await _audioService.play(url);
     } else {

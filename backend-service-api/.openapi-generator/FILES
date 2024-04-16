@@ -10,6 +10,7 @@ src/apis/InternalApi.ts
 src/apis/OriginalAlbumApi.ts
 src/apis/PlaylistApi.ts
 src/apis/PlaylistItemsApi.ts
+src/apis/UserProfileApi.ts
 src/apis/index.ts
 src/index.ts
 src/models/AlbumOrderOptions.ts
@@ -38,12 +39,16 @@ src/models/PlaylistItemReadDto.ts
 src/models/PlaylistReadDto.ts
 src/models/PlaylistType.ts
 src/models/PlaylistVisibility.ts
+src/models/ProblemDetails.ts
 src/models/SortOrder.ts
 src/models/ThumbnailReadDto.ts
 src/models/TrackGetMultipleResp.ts
 src/models/TrackReadDto.ts
 src/models/TrackUpdateDto.ts
 src/models/TrackWriteDto.ts
+src/models/UserProfile.ts
+src/models/UserProfileReadDto.ts
+src/models/UserProfileWriteDto.ts
 src/models/index.ts
 src/runtime.ts
 tsconfig.esm.json

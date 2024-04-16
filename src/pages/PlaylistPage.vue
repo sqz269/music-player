@@ -6,13 +6,30 @@
       </template>
 
       <template #default="{ data }">
-        <div class="row full-height" style="min-height: inherit;">
-          <div class="col-3 col-lg-3 col-xl-2" style="min-height: inherit;">
+        <div
+          class="row full-height"
+          style="min-height: inherit;"
+        >
+          <div
+            class="col-3 col-lg-3 col-xl-2"
+            style="min-height: inherit;"
+          >
             <div class="full-height">
-              <q-card bordered class="my-card q-ma-lg" flat>
+              <q-card
+                bordered
+                class="my-card q-ma-lg"
+                flat
+              >
                 <q-card-section class="q-pa-sm">
-                  <q-card-section horizontal class="q-pa-md">
-                    <q-img class="col" :ratio="1" :src="data?.playlistTracksTransformed[0].thumbnails?.large">
+                  <q-card-section
+                    horizontal
+                    class="q-pa-md"
+                  >
+                    <q-img
+                      class="col"
+                      :ratio="1"
+                      :src="data?.playlistTracksTransformed[0].thumbnails?.large"
+                    >
                     </q-img>
                   </q-card-section>
 
@@ -25,30 +42,80 @@
                       {{ data?.playlistTotalTracks }} Songs
                     </q-card-main>
                   </q-card-section>
+                  <q-card-section class="q-px-md q-py-none">
+                    <q-card-main class="text-caption">
+                      Updated {{ formatDistanceToNow(data?.playlistInfo.lastModified!) }} ago
+                    </q-card-main>
+                  </q-card-section>
                   <q-card-section>
-                    <q-select v-model="playlistVisibility" :options="playlistVisiblityDropdownOptions" emit-value
-                      borderless dense />
+                    <!-- row flex forces the q-select to have it's width collapsed -->
+                    <div class="row flex">
+                      <q-select
+                        v-model="playlistVisibility"
+                        :options="playlistVisiblityDropdownOptions"
+                        emit-value
+                        borderless
+                        dense
+                      />
+                    </div>
+
                   </q-card-section>
                 </q-card-section>
+
+                <q-card-actions align="evenly">
+
+                  <q-btn
+                    class="col-5"
+                    color="primary"
+                  >
+                    Play All
+                  </q-btn>
+
+                  <q-btn
+                    class="col-5"
+                    color="primary"
+                  >
+                    Shuffle
+                  </q-btn>
+
+
+                </q-card-actions>
               </q-card>
             </div>
           </div>
-          <div class="col-9" style="min-height: inherit;">
+          <div
+            class="col-9"
+            style="min-height: inherit;"
+          >
             <q-scroll-area class="fit">
               <q-list v-if="data?.playlistTracksTransformed">
-                <q-item clickable v-for="(track, index) in data?.playlistTracksTransformed" :key="index">
+                <q-item
+                  clickable
+                  v-for="(track, index) in data?.playlistTracksTransformed"
+                  :key="index"
+                >
                   <q-item-section side>
                     <q-item-label>{{ index + 1 }}</q-item-label>
                   </q-item-section>
                   <q-item-section avatar>
-                    <q-avatar rounded size="58px">
+                    <q-avatar
+                      rounded
+                      size="58px"
+                    >
                       <img :src="track.thumbnails?.small">
                     </q-avatar>
                   </q-item-section>
                   <q-item-section>
                     <q-item-label class="text-subtitle1">{{ track.name }}</q-item-label>
-                    <q-item-label caption lines="1" class="text-bold">{{ track.albumName }}</q-item-label>
-                    <q-item-label caption lines="1">{{ track.circle.map(c => c.name).join(', ') }}</q-item-label>
+                    <q-item-label
+                      caption
+                      lines="1"
+                      class="text-bold"
+                    >{{ track.albumName }}</q-item-label>
+                    <q-item-label
+                      caption
+                      lines="1"
+                    >{{ track.circle.map(c => c.name).join(', ') }}</q-item-label>
                   </q-item-section>
                 </q-item>
               </q-list>
@@ -57,7 +124,10 @@
         </div>
       </template>
       <template #error="{ error }">
-        <q-card class="q-ma-md" style="max-width: 400px">
+        <q-card
+          class="q-ma-md"
+          style="max-width: 400px"
+        >
           <q-card-section>
             <q-card-title class="text-h6">Error</q-card-title>
             <q-card-main>
@@ -85,6 +155,7 @@ import { useLoadableController } from 'src/utils/Loadable/LoadableController';
 import LoadableElement from 'src/utils/Loadable/LoadableElement.vue';
 import ApiConfigurationProvider from 'src/services/domain/ApiConfigurationProvider';
 import { TrackInfo } from 'src/models/TrackInfo';
+import { formatDistanceToNow } from 'date-fns';
 
 const playlistVisiblityDropdownOptions = [
   {

@@ -18,6 +18,8 @@ import RadioService from './services/domain/RadioService';
 import useSimpleRadioService from './services/external/SimpleRadioService';
 import useApiOndemandPlaylistService from './services/external/ApiOndemandPlaylistService';
 import PlaylistService from './services/domain/PlaylistService';
+import useApiUserService from './services/external/ApiUserService';
+import UserProfileService from './services/domain/UserProfileService';
 
 const audioService = useAudioServiceHls();
 const authService = useKeycloakAuthenticationService();
@@ -26,6 +28,11 @@ const playlistService = useApiOndemandPlaylistService(
   apiConfigProvider,
   authService
 );
+const userProfileService = useApiUserService(
+  apiConfigProvider,
+  authService
+);
+
 const queueService = useNaiveQueueService(
   audioService,
   playlistService,
@@ -43,6 +50,8 @@ provide<ApiConfigurationProvider<Configuration>>(
   'apiConfigProvider',
   apiConfigProvider
 );
+provide<UserProfileService>('userProfileService', userProfileService);
+
 provide<QueueService>('queueService', queueService);
 provide<RadioService>('radioService', radioService);
 provide<PlaylistService>('playlistService', playlistService);
@@ -53,10 +62,16 @@ onBeforeMount(() => {
     .catch((error) => alert(`Error initializing authentication: ${error}`));
 
   apiConfigProvider
-    .initialize('https://api-music.marisad.me', authService)
+    .initialize('https://api.marisad.me', authService)
     .catch((error) => {
       alert(`Error initializing API configuration: ${error}`);
     });
+
+  userProfileService
+    .initialize()
+    .catch((error) =>
+      alert(`Error initializing user profile service: ${error}`)
+    );
 
   audioService
     .initialize()
