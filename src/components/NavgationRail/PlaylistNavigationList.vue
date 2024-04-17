@@ -46,6 +46,27 @@
 
     <q-list>
       <q-item
+        clickable
+        v-ripple
+        :inset-level="0.3"
+        @click="showCreatePlaylistDialog"
+      >
+        <q-item-section avatar>
+          <q-icon
+            :name="outlinedPlaylistAdd"
+            size="24px"
+          />
+        </q-item-section>
+
+        <q-item-section>
+          <q-item-label>
+            <span class="text-weight-medium">
+              Create Playlist
+            </span>
+          </q-item-label>
+        </q-item-section>
+      </q-item>
+      <q-item
         v-for="playlist in playlistService?.playlists.value"
         clickable
         v-ripple
@@ -75,15 +96,18 @@
 import {
   outlinedFavoriteBorder,
   outlinedHistory,
-  outlinedLibraryMusic,
+  outlinedPlaylistAdd,
   outlinedPlaylistPlay,
 } from '@quasar/extras/material-icons-outlined';
+import { useQuasar } from 'quasar';
 import AuthenticationService from 'src/services/domain/AuthenticationService';
 import PlaylistService from 'src/services/domain/PlaylistService';
 import { inject } from 'vue';
 import { useRouter } from 'vue-router';
+import PlaylistCreateDialog from '../Dialogs/PlaylistCreateDialog.vue';
 
 // Injected services
+const $q = useQuasar();
 const $router = useRouter();
 const authService = inject<AuthenticationService>('authService');
 const playlistService = inject<PlaylistService>('playlistService');
@@ -109,5 +133,16 @@ const collectionNavigations = [
 
 const gotoPlaylist = (playlistId: string) => {
   $router.push({ name: 'Playlist', params: { playlistId } });
+};
+
+const showCreatePlaylistDialog = () => {
+  $q.dialog(
+    {
+      component: PlaylistCreateDialog,
+      componentProps: {
+        playlistService,
+      },
+    }
+  );
 };
 </script>

@@ -24,25 +24,19 @@ export interface AssetReadDto {
      * @type {string}
      * @memberof AssetReadDto
      */
-    assetId?: string;
+    id?: string;
     /**
      * 
      * @type {string}
      * @memberof AssetReadDto
      */
-    assetName?: string;
+    name?: string;
     /**
      * 
      * @type {string}
      * @memberof AssetReadDto
      */
-    assetMime?: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AssetReadDto
-     */
-    large?: boolean;
+    mime?: string;
     /**
      * 
      * @type {number}
@@ -74,10 +68,9 @@ export function AssetReadDtoFromJSONTyped(json: any, ignoreDiscriminator: boolea
     }
     return {
         
-        'assetId': json['assetId'] == null ? undefined : json['assetId'],
-        'assetName': json['assetName'] == null ? undefined : json['assetName'],
-        'assetMime': json['assetMime'] == null ? undefined : json['assetMime'],
-        'large': json['large'] == null ? undefined : json['large'],
+        'id': json['id'] == null ? undefined : json['id'],
+        'name': json['name'] == null ? undefined : json['name'],
+        'mime': json['mime'] == null ? undefined : json['mime'],
         'size': json['size'] == null ? undefined : json['size'],
         'url': json['url'] == null ? undefined : json['url'],
     };
@@ -89,10 +82,9 @@ export function AssetReadDtoToJSON(value?: AssetReadDto | null): any {
     }
     return {
         
-        'assetId': value['assetId'],
-        'assetName': value['assetName'],
-        'assetMime': value['assetMime'],
-        'large': value['large'],
+        'id': value['id'],
+        'name': value['name'],
+        'mime': value['mime'],
         'size': value['size'],
         'url': value['url'],
     };

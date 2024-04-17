@@ -135,13 +135,13 @@ const tableColumns = [
     name: 'id',
     label: 'Asset ID',
     align: 'center',
-    field: (row: AssetReadDto) => row.assetId
+    field: (row: AssetReadDto) => row.id
   },
   {
     name: 'name',
     label: 'Name',
     align: 'left',
-    field: (row: AssetReadDto) => row.assetName
+    field: (row: AssetReadDto) => row.name
   },
   {
     name: 'size',
@@ -154,7 +154,7 @@ const tableColumns = [
     name: 'mime-type',
     label: 'Content Type',
     align: 'center',
-    field: (row: AssetReadDto) => row.assetMime
+    field: (row: AssetReadDto) => row.mime
   },
   {
     name: 'actions',
