@@ -1,6 +1,6 @@
 <template>
-  <q-page>
-    <LoadableElement :state-controller="controller">
+  <q-page v-if="controller">
+    <LoadableElement :state-controller="controller.controller">
       <template #loading>
         <q-spinner-gears size="100px" />
       </template>
@@ -37,18 +37,32 @@
                     <q-card-title class="text-h5">{{ data?.playlistInfo.name }}</q-card-title>
                   </q-card-section>
 
+                  <q-card-section class="q-px-md q-py-sm">
+                    <q-card-title class="text-subtitle2">By {{ data?.playlistInfo.owner?.displayName }}</q-card-title>
+                  </q-card-section>
+
                   <q-card-section class="q-px-md q-py-none">
                     <q-card-main class="text-caption">
-                      {{ data?.playlistTotalTracks }} Songs
+
                     </q-card-main>
                   </q-card-section>
                   <q-card-section class="q-px-md q-py-none">
                     <q-card-main class="text-caption">
-                      Updated {{ formatDistanceToNow(data?.playlistInfo.lastModified!) }} ago
+                      <span>
+                        {{ data?.playlistTotalTracks }} Songs
+                      </span>
+
+                      <span>
+                        ·
+                      </span>
+
+                      <span>
+                        Updated {{ formatDistanceToNow(data?.playlistInfo.lastModified!) }} ago
+                      </span>
                     </q-card-main>
                   </q-card-section>
                   <q-card-section>
-                    <!-- row flex forces the q-select to have it's width collapsed -->
+                    <!-- row flex forces the q-select's width to be collapsed -->
                     <div class="row flex">
                       <q-select
                         v-model="playlistVisibility"
@@ -65,20 +79,18 @@
                 <q-card-actions align="evenly">
 
                   <q-btn
+                    outline
                     class="col-5"
-                    color="primary"
                   >
                     Play All
                   </q-btn>
 
                   <q-btn
+                    outline
                     class="col-5"
-                    color="primary"
                   >
                     Shuffle
                   </q-btn>
-
-
                 </q-card-actions>
               </q-card>
             </div>
@@ -156,6 +168,7 @@ import LoadableElement from 'src/utils/Loadable/LoadableElement.vue';
 import ApiConfigurationProvider from 'src/services/domain/ApiConfigurationProvider';
 import { TrackInfo } from 'src/models/TrackInfo';
 import { formatDistanceToNow } from 'date-fns';
+import { PlaylistController as PlaylistPageController, usePlaylistPageController } from 'src/components/PlaylistPage/PlaylistPageController';
 
 const playlistVisiblityDropdownOptions = [
   {
@@ -176,13 +189,6 @@ interface PlaylistPageRouteParamters {
   playlistId: ComputedRef<string>;
 }
 
-interface PlaylistPageViewModel {
-  playlistInfo: PlaylistReadDto;
-  playlistTotalTracks: number;
-  playlistTracks: TrackReadDto[];
-  playlistTracksTransformed: TrackInfo[];
-}
-
 const playlistVisibility = ref<PlaylistVisibility>(PlaylistVisibility.Public);
 
 // Injected services
@@ -191,73 +197,24 @@ const playlistService = inject<PlaylistService>('playlistService');
 if (!playlistService) {
   throw new Error('Playlist service not found');
 }
-const apiConfigProvider = inject<ApiConfigurationProvider<Configuration>>('apiConfigProvider');
 
 const routeParams: PlaylistPageRouteParamters = {
   playlistId: computed(() => $router.currentRoute.value.params.playlistId as string),
 };
 
-const controller = useLoadableController<PlaylistPageViewModel>();
-
-const load = async (playlistId: string) => {
-  controller.setLoading();
-  const blockSize = 50;
-  try {
-    const playlistInfo = await playlistService.getPlaylist(playlistId);
-
-    if (!playlistInfo) {
-      throw new Error('Playlist not found');
-    }
-
-    // TODO: Make lazy loading of tracks
-    const allTrackIds: string[] = [];
-    while (true) {
-      const tracksIds = await playlistService.getPlaylistTracks(playlistId, allTrackIds.length, 50);
-      if (tracksIds.length === 0) {
-        break;
-      }
-
-      allTrackIds.push(...tracksIds);
-    }
-
-    // Fetch actual track infos from the backend
-    // Block size is 50, so we need to fetch in blocks
-    const albumsApi = new AlbumApi(apiConfigProvider?.getApiConfigurationWithAuth());
-    const playlistTracks: TrackReadDto[] = [];
-    for (let i = 0; i < allTrackIds.length; i += blockSize) {
-      const block = allTrackIds.slice(i, i + blockSize);
-      const tracks = await albumsApi.getTracks(
-        {
-          requestBody: block
-        }
-      )
-      playlistTracks.push(...tracks.tracks!);
-    }
-
-    playlistVisibility.value = playlistInfo.visibility!;
-
-    const vm = {
-      playlistInfo,
-      playlistTotalTracks: allTrackIds.length,
-      playlistTracks,
-      playlistTracksTransformed: playlistTracks.map((track) => {
-        return TrackInfo.fromTrackReadDto(track);
-      }),
-    } as PlaylistPageViewModel;
-
-    controller.setSuccess(vm);
-  } catch (error) {
-    controller.setError(error as Error);
-    throw error;
-  }
-}
-
+let controller: PlaylistPageController | null;
 onBeforeMount(() => {
-  load(routeParams.playlistId.value as string);
+  controller = usePlaylistPageController(
+    {
+      playlistId: routeParams.playlistId.value,
+    }
+  );
+});
 
-  watch(routeParams.playlistId, async (playlistId) => {
-    await load(playlistId as string);
-  });
+watch(routeParams.playlistId, (newPlaylistId) => {
+  if (controller) {
+    controller.changePlaylist(newPlaylistId);
+  }
 });
 </script>
 

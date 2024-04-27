@@ -12,7 +12,9 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: '',
-        component: () => import('pages/HomePage.vue'),
+        redirect: () => {
+          return { name: 'Home', params: { page: 1 } };
+        },
       },
       {
         path: ':page',

@@ -8,10 +8,12 @@
       :inset-level="0.3"
       :to="link.route"
       exact
-      active-class="text-white bg-grey-8 text-weight-bolder"
     >
       <q-item-section avatar>
-        <q-icon :name="link.icon" size="24px" />
+        <q-icon
+          :name="link.icon"
+          size="24px"
+        />
       </q-item-section>
       <q-item-section>
         <q-item-label>
@@ -42,7 +44,7 @@ const navigationItems = [
     text: 'Home',
     icon: outlinedHome,
     activeIcon: matHome,
-    route: { name: 'homePaginate' },
+    route: { name: 'Home', params: { page: 1 } },
   },
   {
     text: 'Search',
