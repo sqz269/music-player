@@ -1,9 +1,0 @@
-
-.album-card-long[data-v-04e0786a] {
-  background-color: rgba(0, 0, 0, 0.35) !important;
-}
-.album-card-long[data-v-04e0786a]:hover {
-  background-color: rgba(197, 193, 193, 0.2) !important;
-  transition: background-color, color, 200ms linear !important;
-  cursor: pointer !important;
-}
