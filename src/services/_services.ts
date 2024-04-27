@@ -37,7 +37,7 @@ const mediaSessionService = useBrowserMediaSessionService(
 
 const initialize = async () => {
   authService
-    .initialize('music-player')
+    .initialize('tlmc-player-vue')
     .catch((error) => alert(`Error initializing authentication: ${error}`));
 
   apiConfigurationProvider
