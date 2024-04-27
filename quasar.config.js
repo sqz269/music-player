@@ -60,7 +60,7 @@ module.exports = configure(function (/* ctx */) {
 
       // rebuildCache: true, // rebuilds Vite/linter/etc cache on startup
 
-      publicPath: 'music-player',
+      publicPath: 'tlmc-player-vue',
       // analyze: true,
       // env: {},
       // rawDefine: {}
