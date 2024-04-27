@@ -11,7 +11,11 @@ export default function useKeycloakAuthenticationService(): AuthenticationServic
   let _keycloak: Keycloak | null = null;
 
   async function initialize(publicPath: string | null = null): Promise<void> {
-    _keycloak = new Keycloak('/keycloak.json');
+    const keycloakConfig = publicPath
+      ? `${window.location.origin}/${publicPath}/keycloak.json`
+      : `${window.location.origin}/keycloak.json`;
+
+    _keycloak = new Keycloak(keycloakConfig);
 
     try {
       const slientCheckSsoUrl = publicPath
