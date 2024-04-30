@@ -1,6 +1,9 @@
 <template>
   <div class="row full-width q-px-none q-pt-lg">
-    <div class="col-4 q-px-md" style="max-width: 230px">
+    <div
+      class="col-4 q-px-md"
+      style="max-width: 230px"
+    >
       <q-img
         :src="viewModel.albumCoverUrl"
         ratio="1"
@@ -20,7 +23,10 @@
 
         <div class="col-12">
           <div class="row full-width">
-            <div id="artists" class="metadata-entry">
+            <div
+              id="artists"
+              class="metadata-entry"
+            >
               <span
                 class="text-subtitle1 text-bold cursor-pointer artist-name"
                 @click="gotoCircle(artistId as string)"
@@ -31,7 +37,10 @@
               </span>
             </div>
 
-            <q-separator vertical spaced></q-separator>
+            <q-separator
+              vertical
+              spaced
+            ></q-separator>
 
             <div
               id="release-date"
@@ -78,7 +87,7 @@ const initializeViewModel = (): AlbumInfoSectionViewModel => {
   console.log('albumArtists', albumArtists);
 
   return {
-    albumName: props.album.albumName?._default || '',
+    albumName: props.album.name?._default || '',
     albumArtists,
     albumCoverUrl: props.album.thumbnail?.large?.url || null,
     releaseDate: props.album.releaseDate || null,
