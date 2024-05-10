@@ -50,13 +50,13 @@ const navigationItems = [
     text: 'Search',
     icon: outlinedSearch,
     activeIcon: matSearch,
-    route: { name: 'search' },
+    route: { name: 'Search' },
   },
   {
     text: 'Radio',
     icon: outlinedRadio,
     activeIcon: matRadio,
-    route: { name: 'radio' },
+    route: { name: 'Radio' },
   },
 ];
 </script>
