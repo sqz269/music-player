@@ -39,7 +39,7 @@
         <q-item
           clickable
           v-close-popup
-          @click="onAccountDropdownClick"
+          @click="onLogoutClick"
         >
           <q-item-section>
             <q-item-label>Logout</q-item-label>
@@ -62,5 +62,9 @@ const authService = inject<AuthenticationService>('authService');
 
 const onAccountDropdownClick = (evt: Event) => {
   console.log('Item clicked', evt);
+};
+
+const onLogoutClick = () => {
+  authService?.logout();
 };
 </script>
