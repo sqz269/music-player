@@ -81,6 +81,11 @@ export interface GetAlbumsByIdsRequest {
 
 export interface GetRandomSampleTrackRequest {
     limit?: number;
+    releaseDateBegin?: Date;
+    releaseDateEnd?: Date;
+    circleIds?: Array<string>;
+    originalAlbumIds?: Array<string>;
+    originalTrackIds?: Array<string>;
 }
 
 export interface GetTrackRequest {
@@ -402,6 +407,26 @@ export class AlbumApi extends runtime.BaseAPI {
 
         if (requestParameters['limit'] != null) {
             queryParameters['limit'] = requestParameters['limit'];
+        }
+
+        if (requestParameters['releaseDateBegin'] != null) {
+            queryParameters['ReleaseDateBegin'] = (requestParameters['releaseDateBegin'] as any).toISOString();
+        }
+
+        if (requestParameters['releaseDateEnd'] != null) {
+            queryParameters['ReleaseDateEnd'] = (requestParameters['releaseDateEnd'] as any).toISOString();
+        }
+
+        if (requestParameters['circleIds'] != null) {
+            queryParameters['CircleIds'] = requestParameters['circleIds'];
+        }
+
+        if (requestParameters['originalAlbumIds'] != null) {
+            queryParameters['OriginalAlbumIds'] = requestParameters['originalAlbumIds'];
+        }
+
+        if (requestParameters['originalTrackIds'] != null) {
+            queryParameters['OriginalTrackIds'] = requestParameters['originalTrackIds'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
