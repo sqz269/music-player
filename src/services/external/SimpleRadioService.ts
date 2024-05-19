@@ -1,9 +1,9 @@
 import { readonly, ref, watch } from 'vue';
 import QueueService, { QueueAddMode } from '../domain/QueueService';
-import RadioService from '../domain/RadioService';
+import RadioService, { RadioFilters } from '../domain/RadioService';
 import Logger from 'src/utils/Logger';
 import ApiConfigurationProvider from '../domain/ApiConfigurationProvider';
-import { Configuration } from 'app/backend-service-api';
+import { Configuration, TrackReadDto } from 'app/backend-service-api';
 import { AlbumApi } from 'app/backend-service-api';
 
 export default function useSimpleRadioService(
@@ -17,6 +17,9 @@ export default function useSimpleRadioService(
 
   const _isActive = ref(false);
   const isActive = readonly(_isActive);
+
+  const _filters = ref<RadioFilters | null>(null);
+  const filters = readonly(_filters);
 
   const initialize = async () => {
     _logger.debug('Initializing SimpleRadioService');
@@ -32,15 +35,38 @@ export default function useSimpleRadioService(
     _logger.debug('SimpleRadioService initialized');
   };
 
-  const _loadMoreTracks = async () => {
-    _logger.debug('Loading more tracks for radio');
+  const _getSampleTrack = async (): Promise<TrackReadDto[]> => {
+    _logger.debug('Getting random sample track');
     const albumApi = new AlbumApi(
       _apiConfigProvider.getApiConfigurationWithAuth()
     );
+
+    const circleIds = _filters.value?.circles?.length ? _filters.value.circles : undefined;
+    const originalAlbumIds = _filters.value?.originalAlbums?.length ? _filters.value.originalAlbums : undefined;
+    const originalTrackIds = _filters.value?.originalTracks?.length ? _filters.value.originalTracks : undefined;
+
+    console.log('Getting random sample track', {
+      circleIds,
+      originalAlbumIds,
+      originalTrackIds,
+    });
+
     const tracks = await albumApi.getRandomSampleTrack({
+      releaseDateBegin: filters.value?.releaseDateBegin || undefined,
+      releaseDateEnd: filters.value?.releaseDateEnd || undefined,
+      circleIds,
+      originalAlbumIds,
+      originalTrackIds,
       limit: 10,
     });
 
+    return tracks;
+  }
+
+  const _loadMoreTracks = async () => {
+    _logger.debug('Loading more tracks for radio, filters: ', filters.value);
+
+    const tracks = await _getSampleTrack();
     const trackIds = tracks.map((track) => track.id!);
 
     if (trackIds.length > 0) {
@@ -85,6 +111,13 @@ export default function useSimpleRadioService(
     await _onRadioDeactivated();
   };
 
+  const setFilters = async (filters: RadioFilters | null) => {
+    // Set the filters for the radio service
+    _logger.debug('Setting radio filters');
+    _logger.debug('New filters: ', filters);
+    _filters.value = filters;
+  };
+
   const toggle = async () => {
     if (_isActive.value) {
       await deactivate();
@@ -95,9 +128,11 @@ export default function useSimpleRadioService(
 
   return {
     isActive,
+    filters,
     initialize,
     activate,
     deactivate,
+    setFilters,
     toggle,
   } as RadioService;
 }

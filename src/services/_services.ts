@@ -1,5 +1,6 @@
 import AudioService from './domain/AudioService';
 import useApiOndemandPlaylistService from './external/ApiOndemandPlaylistService';
+import useApiGlobalStaticDataProvider from './external/ApiStaticDataProvider';
 import useApiUserService from './external/ApiUserService';
 import useAudioServiceHls from './external/AudioServiceHls';
 import useBrowserMediaSessionService from './external/BrowserMediaSessionService';
@@ -33,6 +34,10 @@ const radioService = useSimpleRadioService(
 const mediaSessionService = useBrowserMediaSessionService(
   audioService,
   queueService,
+);
+
+const globalStaticDataProvider = useApiGlobalStaticDataProvider(
+  apiConfigurationProvider
 );
 
 const initialize = async () => {
@@ -73,6 +78,10 @@ const initialize = async () => {
   playlistService
     .initialize()
     .catch((error) => alert(`Error initializing playlist service: ${error}`));
+
+  globalStaticDataProvider
+    .initialize()
+    .catch((error) => alert(`Error initializing static stats provider: ${error}`));
 }
 
 export {
@@ -84,6 +93,7 @@ export {
   queueService,
   radioService,
   mediaSessionService,
+  globalStaticDataProvider as staticStatsProvider,
 
   initialize,
 }

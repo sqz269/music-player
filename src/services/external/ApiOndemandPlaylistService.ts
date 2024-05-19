@@ -311,5 +311,5 @@ export default function useApiOndemandPlaylistService(
     removeTrackFromPlaylist,
     isTracksInPlaylist,
     isTrackInPlaylist,
-  } as PlaylistService;
+  };
 }

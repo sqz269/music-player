@@ -13,6 +13,7 @@ import QueueService from './services/domain/QueueService';
 import RadioService from './services/domain/RadioService';
 import PlaylistService from './services/domain/PlaylistService';
 import { Configuration } from 'app/backend-service-api';
+import GlobalStaticDataProvider from './services/domain/GlobalStaticDataProvider';
 
 provide<AudioService>('audioService', services.audioService);
 provide<AuthenticationService>('authService', services.authService);
@@ -25,6 +26,8 @@ provide<UserProfileService>('userProfileService', services.userProfileService);
 provide<QueueService>('queueService', services.queueService);
 provide<RadioService>('radioService', services.radioService);
 provide<PlaylistService>('playlistService', services.playlistService);
+
+provide<GlobalStaticDataProvider>('globalStaticDataProvider', services.staticStatsProvider);
 
 onBeforeMount(() => {
   services.initialize()

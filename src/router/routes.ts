@@ -17,6 +17,11 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
+        path: 'radio',
+        name: 'Radio',
+        component: () => import('pages/RadioPage.vue'),
+      },
+      {
         path: 'search',
         name: 'Search',
         component: () => import('pages/SearchPage.vue'),
