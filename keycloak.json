@@ -2,7 +2,7 @@
   "realm": "MusicPlayer",
   "auth-server-url": "https://sso.marisad.me",
   "ssl-required": "external",
-  "resource": "vuejs-frontend",
+  "resource": "VueLocal-fqF9LNQ0grCgLz3v7h8k5vSOFIihN1gVGsMrqwOBG",
   "public-client": true,
   "confidential-port": 0
 }
