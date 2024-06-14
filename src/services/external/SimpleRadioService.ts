@@ -71,7 +71,7 @@ export default function useSimpleRadioService(
 
     if (trackIds.length > 0) {
       _logger.debug(`Adding ${trackIds.length} tracks to the queue`);
-      _queueService.addTracksByIds(trackIds, QueueAddMode.APPEND_LAST);
+      _queueService.addTracksByIds(trackIds, QueueAddMode.APPEND_LAST, undefined, 'radio');
     }
   };
 

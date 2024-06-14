@@ -61,10 +61,10 @@
     <template #error="{ error }">
       <q-card class="q-ma-md">
         <q-card-section>
-          <q-card-title class="text-h6">Error</q-card-title>
+          <div class="text-h6">Error</div>
         </q-card-section>
         <q-card-section>
-          <q-card-text>{{ error!.message }}</q-card-text>
+          <div class="text-caption">{{ error!.message }}</div>
         </q-card-section>
       </q-card>
     </template>
