@@ -107,10 +107,10 @@
           style="max-width: 400px"
         >
           <q-card-section>
-            <q-card-title class="text-h6">Error</q-card-title>
-            <q-card-main>
-              <q-markup :value="error?.message" />
-            </q-card-main>
+            <div class="text-h6">Error</div>
+            <div class="text-subtitle1">Failed to load album</div>
+            <div class="text-caption">{{ error?.message }}</div>
+            <div class="text-caption">{{ error?.stack }}</div>
           </q-card-section>
 
           <q-separator inset />
@@ -142,7 +142,7 @@ import LoadableElement from 'src/utils/Loadable/LoadableElement.vue';
 import { TrackReadDto } from 'app/backend-service-api';
 import AlbumInfoSection from 'src/components/AlbumPage/AlbumInfoSection.vue';
 import TrackListTable from 'src/components/AlbumPage/TrackListTable.vue';
-import { QCard, useQuasar } from 'quasar';
+import { QCard, useQuasar, } from 'quasar';
 import AlbumAssetsViewerDialog from 'src/components/Dialogs/AlbumAssetsViewerDialog.vue';
 import QueueService, { QueueAddMode } from 'src/services/domain/QueueService';
 

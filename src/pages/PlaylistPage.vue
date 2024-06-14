@@ -34,11 +34,11 @@
                   </q-card-section>
 
                   <q-card-section class="q-px-md q-py-none">
-                    <q-card-title class="text-h5">{{ data?.playlistInfo.name }}</q-card-title>
+                    <div class="text-h5">{{ data?.playlistInfo.name }}</div>
                   </q-card-section>
 
                   <q-card-section class="q-px-md q-py-sm">
-                    <q-card-title class="text-subtitle2">By {{ data?.playlistInfo.owner?.displayName }}</q-card-title>
+                    <div class="text-subtitle2">By {{ data?.playlistInfo.owner?.displayName }}</div>
                   </q-card-section>
 
                   <q-card-section class="q-px-md q-py-none">
@@ -141,7 +141,7 @@
           style="max-width: 400px"
         >
           <q-card-section>
-            <q-card-title class="text-h6">Error</q-card-title>
+            <div class="text-h6">Error</div>
             <q-card-main>
               <q-markup :value="error?.message" />
             </q-card-main>

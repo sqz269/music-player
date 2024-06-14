@@ -23,6 +23,15 @@
     <q-space></q-space>
 
     <AccountButton />
+
+    <q-btn
+      round
+      dense
+      flat
+      size="lg"
+      :icon="outlinedBugReport"
+      @click="goDebug"
+    ></q-btn>
   </q-toolbar>
 </template>
 
@@ -30,6 +39,7 @@
 import {
   outlinedArrowForward,
   outlinedArrowBack,
+  outlinedBugReport,
 } from '@quasar/extras/material-icons-outlined';
 import AccountButton from './AccountButton.vue';
 import { useRouter } from 'vue-router';
@@ -42,5 +52,11 @@ const goBack = () => {
 
 const goForward = () => {
   $router.forward();
+};
+
+const goDebug = () => {
+  $router.push({
+    name: 'Debug',
+  });
 };
 </script>
