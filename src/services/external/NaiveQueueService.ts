@@ -1,7 +1,7 @@
 import QueuedTrack from 'src/models/QueuedTrack';
 import AudioService from '../domain/AudioService';
 import QueueService, { QueueAddMode, RepeatMode } from '../domain/QueueService';
-import { DeepReadonly, readonly, Ref, ref, watch } from 'vue';
+import { computed, DeepReadonly, readonly, Ref, ref, watch } from 'vue';
 import Logger from 'src/utils/Logger';
 import ApiConfigurationProvider from '../domain/ApiConfigurationProvider';
 import { Configuration } from 'app/backend-service-api';
@@ -9,6 +9,7 @@ import { AlbumApi } from 'app/backend-service-api';
 import { TrackGetMultipleResp } from 'app/backend-service-api';
 import { resourceLimits } from 'worker_threads';
 import PlaylistService from '../domain/PlaylistService';
+import GlobalConfiguration from 'src/GlobalConfiguration';
 
 export default function useNaiveQueueService(
   audioService: AudioService,
@@ -29,9 +30,6 @@ export default function useNaiveQueueService(
   const _isShuffled: Ref<boolean> = ref(false);
   const _repeatMode: Ref<RepeatMode> = ref(RepeatMode.OFF);
 
-  const _hasNext = ref(false);
-  const _hasPrevious = ref(false);
-
   const queue: DeepReadonly<Ref<QueuedTrack[]>> = readonly(_queue);
 
   const currentIndex: DeepReadonly<Ref<number | null>> =
@@ -45,8 +43,12 @@ export default function useNaiveQueueService(
   const isShuffled: DeepReadonly<Ref<boolean>> = readonly(_isShuffled);
   const repeatMode: DeepReadonly<Ref<RepeatMode>> = readonly(_repeatMode);
 
-  const hasNext: DeepReadonly<Ref<boolean>> = readonly(_hasNext);
-  const hasPrevious: DeepReadonly<Ref<boolean>> = readonly(_hasPrevious);
+  const hasNext: DeepReadonly<Ref<boolean>> = computed(() => {
+    return _currentIndex.value !== null && _currentIndex.value < _queue.value.length - 1
+  });
+  const hasPrevious: DeepReadonly<Ref<boolean>> = computed(() => {
+    return _currentIndex.value !== null && _currentIndex.value > 0;
+  });
 
   const initialize = async () => {
     _logger.info('Initializing queue service');
@@ -72,12 +74,6 @@ export default function useNaiveQueueService(
       _logger.info('No current track');
       return;
     }
-
-    _hasNext.value =
-      _currentIndex.value !== null &&
-      _currentIndex.value < _queue.value.length - 1;
-    _hasPrevious.value =
-      _currentIndex.value !== null && _currentIndex.value > 0;
 
     if (playlistSerivce.isReady.value) {
       _logger.info('Checking if current track is in favorite playlist');
@@ -144,8 +140,12 @@ export default function useNaiveQueueService(
     }
 
     if (addMode & QueueAddMode.APPEND_NEXT) {
-      _logger.info('Appending tracks to the beginning of the queue');
-      _queue.value.unshift(...tracks);
+      _logger.info('Appending tracks to the next of playing track');
+      if (_currentIndex.value !== null) {
+        _queue.value.splice(_currentIndex.value + 1, 0, ...tracks);
+      } else {
+        _queue.value.unshift(...tracks);
+      }
     }
 
     if (addMode & QueueAddMode.SKIP_CURRENT) {
@@ -306,7 +306,7 @@ export default function useNaiveQueueService(
     _currentTrack.value = _queue.value[index];
     // // FIXME: trackFile?.url is deprecated, Use asset endpoint instead
     // // /api/asset/track/{trackId}
-    const url = `https://api.marisad.me/api/asset/track/${_currentTrack.value.track.id}`;
+    const url = `${GlobalConfiguration.API_BASE_URL}/api/asset/track/${_currentTrack.value.track.id}`;
     if (url) {
       await _audioService.play(url);
     } else {
@@ -348,9 +348,9 @@ export default function useNaiveQueueService(
     isCurrentTrackInFavorite,
     isShuffled,
     repeatMode,
-    initialize,
     hasNext,
     hasPrevious,
+    initialize,
     remainingTracksCount,
     addTracksByIds,
     addTrackById,
