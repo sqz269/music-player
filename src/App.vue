@@ -14,6 +14,10 @@ import RadioService from './services/domain/RadioService';
 import PlaylistService from './services/domain/PlaylistService';
 import { Configuration } from 'app/backend-service-api';
 import GlobalStaticDataProvider from './services/domain/GlobalStaticDataProvider';
+import Logger from './utils/Logger';
+import GlobalConfiguration from './GlobalConfiguration';
+
+Logger.setLevel(GlobalConfiguration.LOGGING_LEVEL);
 
 provide<AudioService>('audioService', services.audioService);
 provide<AuthenticationService>('authService', services.authService);

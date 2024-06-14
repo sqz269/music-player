@@ -1,6 +1,7 @@
 import { CircleReadDto, TrackReadDto } from 'app/backend-service-api';
 import { Duration } from './Duration';
 import { ThumbnailReadDto } from 'app/backend-service-api';
+import GlobalConfiguration from 'src/GlobalConfiguration';
 
 export class CircleInfo {
   constructor(public id: string, public name: string) { }
@@ -46,7 +47,7 @@ export class Thumbnails {
 
 export class TrackInfo {
   static trackAssetBaseUrl =
-    'https://api.marisad.me/api/asset/track/{id}';
+    `${GlobalConfiguration.API_BASE_URL}/api/asset/track/{id}`;
 
   constructor(
     public id: string,

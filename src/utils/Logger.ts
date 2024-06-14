@@ -13,6 +13,10 @@ class _Logger {
     });
   }
 
+  public setLevel(level: pino.LevelWithSilent): void {
+    this._logger.level = level;
+  }
+
   public getLogger(name: string): pino.Logger {
     return this._logger.child({ name });
   }

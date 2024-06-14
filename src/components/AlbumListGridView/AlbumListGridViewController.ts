@@ -6,7 +6,6 @@ import {
   useLoadableController,
 } from 'src/utils/Loadable/LoadableController';
 import { AlbumOrderOptions, SortOrder } from 'app/backend-service-api';
-import isEqual from 'lodash/isEqual';
 
 export type AlbumListGridViewController = {
   viewModelController: LoadableState<AlbumListGridViewViewModel>;

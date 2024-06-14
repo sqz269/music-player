@@ -1,3 +1,4 @@
+import GlobalConfiguration from 'src/GlobalConfiguration';
 import AudioService from './domain/AudioService';
 import useApiOndemandPlaylistService from './external/ApiOndemandPlaylistService';
 import useApiGlobalStaticDataProvider from './external/ApiStaticDataProvider';
@@ -42,11 +43,11 @@ const globalStaticDataProvider = useApiGlobalStaticDataProvider(
 
 const initialize = async () => {
   authService
-    .initialize('tlmc-player-vue')
+    .initialize(GlobalConfiguration.WEB_HOST_PUBLIC_PATH)
     .catch((error) => alert(`Error initializing authentication: ${error}`));
 
   apiConfigurationProvider
-    .initialize('https://api.marisad.me', authService)
+    .initialize(GlobalConfiguration.API_BASE_URL, authService)
     .catch((error) => {
       alert(`Error initializing API configuration: ${error}`);
     });
