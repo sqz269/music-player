@@ -27,7 +27,7 @@ class OpenApiAuthenticationMiddleware implements Middleware {
     }
 
     if (!this._authService.isAuthenticated.value) {
-      this._logger.info('User is not authenticated. Proceeding without token');
+      this._logger.debug('User is not authenticated. Proceeding without token');
 
       return Promise.resolve({
         url: context.url,
@@ -53,7 +53,7 @@ class OpenApiAuthenticationMiddleware implements Middleware {
       }
     }
 
-    this._logger.info('Adding Authorization header to request');
+    this._logger.debug('Adding Authorization header to request');
     const token = await this._authService.getAccessToken();
     const headers = new Headers(context.init.headers);
     headers.set('Authorization', `Bearer ${token}`);

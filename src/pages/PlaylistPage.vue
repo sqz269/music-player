@@ -1,4 +1,4 @@
-<template>
+1<template>
   <q-page v-if="controller">
     <LoadableElement :state-controller="controller.controller">
       <template #loading>
@@ -28,7 +28,8 @@
                     <q-img
                       class="col"
                       :ratio="1"
-                      :src="data?.playlistTracksTransformed[0].thumbnails?.large"
+                      v-if="data?.playlistTracksTransformed"
+                      :src="data?.playlistTracksTransformed.find(t => t.thumbnails)?.thumbnails?.large"
                     >
                     </q-img>
                   </q-card-section>
@@ -165,8 +166,6 @@ import { useRouter } from 'vue-router';
 import { TrackReadDto, PlaylistReadDto, Configuration, AlbumApi, PlaylistVisibility } from 'app/backend-service-api';
 import { useLoadableController } from 'src/utils/Loadable/LoadableController';
 import LoadableElement from 'src/utils/Loadable/LoadableElement.vue';
-import ApiConfigurationProvider from 'src/services/domain/ApiConfigurationProvider';
-import { TrackInfo } from 'src/models/TrackInfo';
 import { formatDistanceToNow } from 'date-fns';
 import { PlaylistController as PlaylistPageController, usePlaylistPageController } from 'src/components/PlaylistPage/PlaylistPageController';
 

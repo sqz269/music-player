@@ -71,6 +71,8 @@ export const usePlaylistPageController = (
         }),
       }
 
+      console.dir(viewModel);
+
       controller.setSuccess(viewModel);
     } catch (e) {
       controller.setError(e as Error);

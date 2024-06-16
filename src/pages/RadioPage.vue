@@ -134,6 +134,7 @@
 
                 <q-select
                   label="Original Tracks"
+                  behavior="dialog"
                   filled
                   v-model="filters.originalTracks"
                   use-input

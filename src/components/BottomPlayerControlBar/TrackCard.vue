@@ -1,5 +1,8 @@
 <template>
-  <q-card flat v-if="currentTrack !== null">
+  <q-card
+    flat
+    v-if="currentTrack !== null"
+  >
     <q-card-section horizontal>
       <q-img
         style="height: 125px; max-width: 125px"
@@ -10,11 +13,17 @@
         <div class="text-dark text-h6">
           {{ currentTrack.name }}
         </div>
-        <div class="text-dark text-subtitle2 link" @click="gotoAlbum(currentTrack!.albumId)">
+        <div
+          class="text-dark text-subtitle2 link"
+          @click="gotoAlbum(currentTrack!.albumId)"
+        >
           {{ currentTrack.albumName }}
         </div>
         <div class="row">
-          <div id="artists" class="metadata-entry">
+          <div
+            id="artists"
+            class="metadata-entry"
+          >
             <span
               class="text-dark text-subtitle1 text-bold cursor-pointer artist-name"
               v-for="(circle, index) in currentTrack.circle"
@@ -26,17 +35,19 @@
           </div>
         </div>
       </q-card-section>
-      <q-card-actions vertical class="justify-around q-px-md">
+      <q-card-actions
+        vertical
+        class="justify-around q-px-md"
+      >
         <q-btn
           flat
           round
           size="md"
           color="red"
-          :icon="
-            isCurrentTrackInFavoritePlaylistChangeableController.state.value
+          :icon="isCurrentTrackInFavoritePlaylistChangeableController.state.value
               ? matFavorite
               : outlinedFavoriteBorder
-          "
+            "
           @click="onFavIconClick"
         />
         <q-btn
@@ -81,6 +92,10 @@ const isCurrentTrackInFavoritePlaylistChangeableController =
     queueService.currentTrack as Ref<QueuedTrack | null>,
     async (track: QueuedTrack | null): Promise<boolean> => {
       if (track === null) {
+        return false;
+      }
+
+      if (playlistService!.favorite.value === null) {
         return false;
       }
 

@@ -19,7 +19,7 @@
         </q-card-section>
 
         <q-card-section class="q-px-md q-py-none">
-          <q-card-title class="text-h5">{{ data?.playlistInfo.name }}</q-card-title>
+          <div class="text-h5">{{ data?.playlistInfo.name }}</div>
         </q-card-section>
 
         <q-card-section class="q-px-md q-py-none">

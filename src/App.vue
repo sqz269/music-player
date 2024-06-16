@@ -16,6 +16,10 @@ import { Configuration } from 'app/backend-service-api';
 import GlobalStaticDataProvider from './services/domain/GlobalStaticDataProvider';
 import Logger from './utils/Logger';
 import GlobalConfiguration from './GlobalConfiguration';
+import enLocale from 'i18n-iso-countries/langs/en.json'
+import { registerLocale } from 'i18n-iso-countries';
+
+registerLocale(enLocale);
 
 Logger.setLevel(GlobalConfiguration.LOGGING_LEVEL);
 

@@ -1,6 +1,7 @@
 <template>
   <q-page>
-    <AlbumListGridView :controller="controller!"> </AlbumListGridView>
+    <CircleInfoCard :controller="circleInfoController!"> </CircleInfoCard>
+    <AlbumListGridView :controller="circleAlbumController!"> </AlbumListGridView>
   </q-page>
 </template>
 
@@ -20,6 +21,8 @@ import ApiConfigurationProvider from 'src/services/domain/ApiConfigurationProvid
 import Logger from 'src/utils/Logger';
 import { computed, inject, onBeforeMount, Ref, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
+import useCircleInfoCardController, { CircleInfoCardController } from 'src/components/CircleInfoCard/CircleInfoCardController';
+import CircleInfoCard from 'src/components/CircleInfoCard/CircleInfoCard.vue';
 
 const $router = useRouter();
 const apiConfigProvider =
@@ -30,7 +33,11 @@ if (!apiConfigProvider) {
 
 const logger = Logger.getLogger('Circle Page');
 const circleId: Ref<string | null> = ref(null);
-const loadFunction = computed(() => {
+
+let circleAlbumController: AlbumListGridViewController | null = null;
+let circleInfoController: CircleInfoCardController | null = null;
+
+const circleAlbumLoadFunction = computed(() => {
   return async (state: AlbumListGridViewInputModel) => {
     logger.info(`Loading page ${JSON.stringify(state)}`);
     const circleApi = new CircleApi(
@@ -60,9 +67,9 @@ const loadFunction = computed(() => {
   };
 });
 
-let controller: AlbumListGridViewController | null = null;
-
 onBeforeMount(() => {
+  console.log('onBeforeMount');
+
   const circleIdParam = $router.currentRoute.value.params.circleId;
   if (circleIdParam === undefined) {
     throw new Error('Circle ID not found in route');
@@ -76,8 +83,8 @@ onBeforeMount(() => {
   circleId.value = circleIdParam as string;
   console.log('circleId', circleId.value);
 
-  controller = useAlbumListGridViewController({
-    load: loadFunction.value,
+  circleAlbumController = useAlbumListGridViewController({
+    load: circleAlbumLoadFunction.value,
     initialInputState: {
       page: parseInt(pageParam as string),
       sortField: AlbumOrderOptions.Date,
@@ -85,8 +92,15 @@ onBeforeMount(() => {
     },
   });
 
+  circleInfoController = useCircleInfoCardController({
+    apiConfiguration: apiConfigProvider.getApiConfigurationWithAuth(),
+    initialInputState: {
+      circleId: circleId.value,
+    },
+  });
+
   watch(
-    () => controller!.viewModelController.state.value?.currentPage,
+    () => circleAlbumController!.viewModelController.state.value?.currentPage,
     (newValue, oldValue) => {
       logger.info(`Page changed from ${oldValue} to ${newValue}`);
       $router.push({
@@ -103,7 +117,7 @@ onBeforeMount(() => {
     () => $router.currentRoute.value.params.page,
     (newValue, oldValue) => {
       logger.info(`Page changed from ${oldValue} to ${newValue}`);
-      controller?.changePage(parseInt(newValue as string));
+      circleAlbumController?.changePage(parseInt(newValue as string));
     }
   );
 
@@ -112,7 +126,7 @@ onBeforeMount(() => {
     (newValue, oldValue) => {
       logger.info(`Circle ID changed from ${oldValue} to ${newValue}`);
       circleId.value = newValue as string;
-      // controller.load();
+      circleInfoController?.changeCircleId(circleId.value);
     }
   );
 
