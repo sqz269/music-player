@@ -20,6 +20,7 @@
           </q-btn>
           <div class="text-h6">
             <img
+              v-if="data?.Country?.imageFlagUrl"
               :alt="`${data?.Country?.localizedCountryName} flag`"
               :src="data?.Country?.imageFlagUrl"
               style="width: 25px; height: 16.66px; border: 1px solid gray"
