@@ -9,6 +9,7 @@ import useKeycloakAuthenticationService from './external/KeycloakAuthenticationS
 import useNaiveQueueService from './external/NaiveQueueService';
 import useOpenApiConfigurationProvider from './external/OpenApiConfigurationProvider';
 import useSimpleRadioService from './external/SimpleRadioService';
+import useBasicUserHistoryTrackingService from './external/BasicUserHistoryTrackingService';
 
 const audioService: AudioService = useAudioServiceHls();
 const authService = useKeycloakAuthenticationService();
@@ -40,6 +41,8 @@ const mediaSessionService = useBrowserMediaSessionService(
 const globalStaticDataProvider = useApiGlobalStaticDataProvider(
   apiConfigurationProvider
 );
+
+const historyTrackingService = useBasicUserHistoryTrackingService();
 
 const initialize = async () => {
   authService
@@ -79,6 +82,12 @@ const initialize = async () => {
   playlistService
     .initialize()
     .catch((error) => alert(`Error initializing playlist service: ${error}`));
+
+  historyTrackingService
+    .initialize()
+    .catch((error) =>
+      alert(`Error initializing history tracking service: ${error}`)
+    );
 
   globalStaticDataProvider
     .initialize()
