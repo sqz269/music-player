@@ -43,8 +43,8 @@
               @mouseover="hoveringWhich = props.key"
               @mouseleave="hoveringWhich = undefined"
               :label="hoveringWhich !== props.key ? props.value : undefined"
-              :icon="hoveringWhich === props.key ? outlinedPlayArrow : undefined
-                "
+              :icon="hoveringWhich === props.key ? outlinedPlayArrow : undefined"
+              @click="queueService?.addTrackById(props.key, QueueAddMode.PLAY_IMMEDIATELY)"
             >
             </q-btn>
           </q-td>

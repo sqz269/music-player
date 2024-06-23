@@ -1,16 +1,6 @@
 <template>
   <div class="row full-width q-px-none q-pt-lg">
-    <q-btn
-      class="all-pointer-events absolute-top-right"
-      :icon="outlinedInfo"
-      flat
-      round
-      dense
-    >
-      <q-tooltip>
-        Data provided by {{ viewModel?.dataSources?.join(', ') }}
-      </q-tooltip>
-    </q-btn>
+    <DataSourceButton :dataSources="viewModel.dataSources"></DataSourceButton>
     <div
       class="col-4 q-px-md"
       style="max-width: 230px"
@@ -75,6 +65,7 @@ import { useRouter } from 'vue-router';
 import {
   outlinedInfo,
 } from '@quasar/extras/material-icons-outlined';
+import DataSourceButton from '../DataSourceBtn/DataSourceButton.vue';
 
 interface AlbumInfoSectionProps {
   album: AlbumReadDto;
