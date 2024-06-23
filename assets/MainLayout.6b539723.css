@@ -1,0 +1,14 @@
+
+#artists .artist-name[data-v-d13056d8]:not(:last-child)::after {
+  content: ', ';
+}
+#artists .artist-name[data-v-d13056d8] {
+  cursor: pointer;
+}
+#artists .artist-name[data-v-d13056d8]:hover {
+  text-decoration: underline;
+}
+
+.progress-smooth[data-v-7ce7a969] {
+  transition: width 0.1s linear;
+}
