@@ -1,0 +1,7 @@
+
+#artists .artist-name[data-v-74c424d0]:not(:last-child)::after {
+  content: ', ';
+}
+.q-img[data-v-74c424d0] {
+  border-radius: 4px;
+}
