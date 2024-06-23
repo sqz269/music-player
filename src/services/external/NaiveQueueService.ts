@@ -7,7 +7,6 @@ import ApiConfigurationProvider from '../domain/ApiConfigurationProvider';
 import { Configuration } from 'app/backend-service-api';
 import { AlbumApi } from 'app/backend-service-api';
 import { TrackGetMultipleResp } from 'app/backend-service-api';
-import { resourceLimits } from 'worker_threads';
 import PlaylistService from '../domain/PlaylistService';
 import GlobalConfiguration from 'src/GlobalConfiguration';
 

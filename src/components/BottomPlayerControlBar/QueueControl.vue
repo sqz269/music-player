@@ -1,11 +1,23 @@
 <template>
   <div class="row full-width full-height justify-end items-center">
     <div class="col-8 row justify-end">
-      <q-btn round dense flat :icon="outlinedRepeat" class="text-dark q-mx-sm">
+      <q-btn
+        round
+        dense
+        flat
+        :icon="outlinedRepeat"
+        class="text-dark q-mx-sm"
+      >
         <q-tooltip>Repeat</q-tooltip>
       </q-btn>
 
-      <q-btn round dense flat :icon="outlinedShuffle" class="text-dark q-mx-sm">
+      <q-btn
+        round
+        dense
+        flat
+        :icon="outlinedShuffle"
+        class="text-dark q-mx-sm"
+      >
         <q-tooltip>Shuffle</q-tooltip>
       </q-btn>
 
@@ -35,7 +47,10 @@
     <div class="col">
       <q-item class="full-width">
         <q-item-section side>
-          <q-icon name="volume_up" class="text-dark" />
+          <q-icon
+            name="volume_up"
+            class="text-dark"
+          />
         </q-item-section>
         <q-item-section>
           <q-slider

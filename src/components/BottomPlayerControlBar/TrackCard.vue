@@ -45,8 +45,8 @@
           size="md"
           color="red"
           :icon="isCurrentTrackInFavoritePlaylistChangeableController.state.value
-              ? matFavorite
-              : outlinedFavoriteBorder
+            ? matFavorite
+            : outlinedFavoriteBorder
             "
           @click="onFavIconClick"
         />
@@ -72,7 +72,7 @@ import { matFavorite } from '@quasar/extras/material-icons';
 import { TrackReadDto } from 'app/backend-service-api';
 import { TrackInfo } from 'src/models/TrackInfo';
 import QueueService from 'src/services/domain/QueueService';
-import { computed, ComputedRef, inject, Ref, watch } from 'vue';
+import { computed, ComputedRef, inject, Ref } from 'vue';
 import PlaylistService from 'src/services/domain/PlaylistService';
 import useChangeableController from 'src/utils/Changeable/Changeable';
 import QueuedTrack from 'src/models/QueuedTrack';

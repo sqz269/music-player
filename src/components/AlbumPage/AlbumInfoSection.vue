@@ -1,5 +1,16 @@
 <template>
   <div class="row full-width q-px-none q-pt-lg">
+    <q-btn
+      class="all-pointer-events absolute-top-right"
+      :icon="outlinedInfo"
+      flat
+      round
+      dense
+    >
+      <q-tooltip>
+        Data provided by {{ viewModel?.dataSources?.join(', ') }}
+      </q-tooltip>
+    </q-btn>
     <div
       class="col-4 q-px-md"
       style="max-width: 230px"
@@ -61,6 +72,9 @@
 <script setup lang="ts">
 import { AlbumReadDto } from 'backend-api-client';
 import { useRouter } from 'vue-router';
+import {
+  outlinedInfo,
+} from '@quasar/extras/material-icons-outlined';
 
 interface AlbumInfoSectionProps {
   album: AlbumReadDto;
@@ -73,6 +87,9 @@ interface AlbumInfoSectionViewModel {
   albumCoverUrl: string | null;
 
   releaseDate: Date | null;
+
+  // Data providers
+  dataSources: string[];
 }
 
 // Injected services/data
@@ -91,6 +108,7 @@ const initializeViewModel = (): AlbumInfoSectionViewModel => {
     albumArtists,
     albumCoverUrl: props.album.thumbnail?.large?.url || null,
     releaseDate: props.album.releaseDate || null,
+    dataSources: props.album.dataSource || [],
   } as AlbumInfoSectionViewModel;
 };
 

@@ -1,8 +1,6 @@
-import { watch } from "vue";
-import { authService, playlistService, queueService } from "../_services";
-import HistoryTrackingService from "../domain/HistoryTrackingService";
-import { addYears } from "date-fns";
-import { TimeSpan } from "app/backend-service-api/src/models/TimeSpan";
+import { watch } from 'vue';
+import { authService, playlistService, queueService } from '../_services';
+import HistoryTrackingService from '../domain/HistoryTrackingService';
 
 export default function useBasicUserHistoryTrackingService(): HistoryTrackingService {
   const initialize = async () => {
@@ -15,7 +13,7 @@ export default function useBasicUserHistoryTrackingService(): HistoryTrackingSer
   }
 
   const listenForPlaybackEvents = () => {
-    watch(queueService.currentTrack, async (newTrack, oldTrack) => {
+    watch(queueService.currentTrack, async (newTrack) => {
       if (!_shouldTrack()) {
         return;
       }
@@ -37,7 +35,7 @@ export default function useBasicUserHistoryTrackingService(): HistoryTrackingSer
     )
   }
 
-  const addHistoryWithPosition = async (trackId: string, position: TimeSpan) => {
+  const addHistoryWithPosition = async (trackId: string) => {
     if (!_shouldTrack()) {
       return;
     }

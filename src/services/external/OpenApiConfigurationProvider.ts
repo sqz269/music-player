@@ -4,7 +4,6 @@ import ApiConfigurationProvider from '../domain/ApiConfigurationProvider';
 import AuthenticationService from '../domain/AuthenticationService';
 import { RequestContext } from 'app/backend-service-api';
 import { FetchParams } from 'app/backend-service-api';
-import { promises } from 'dns';
 
 class OpenApiAuthenticationMiddleware implements Middleware {
   private _logger = Logger.getLogger('OpenApiAuthenticationMiddleware');

@@ -47,7 +47,7 @@ export default function useApiUserService(
       !_authenticationService.isInitialized.value ||
       !_authenticationService.isAuthenticated.value
     ) {
-      _logger.info("Authentication service not initialized or User is not authenticated, Defering User Profile initialization");
+      _logger.info('Authentication service not initialized or User is not authenticated, Defering User Profile initialization');
 
       watch(_authenticationService.isAuthenticated, async (isAuthenticated) => {
         if (isAuthenticated) {

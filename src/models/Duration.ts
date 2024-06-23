@@ -1,4 +1,4 @@
-import { TimeSpan } from "app/backend-service-api/src";
+import { TimeSpan } from 'app/backend-service-api/src';
 
 export class Duration {
   private _duration: number;

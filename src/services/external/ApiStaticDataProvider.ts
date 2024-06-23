@@ -1,7 +1,7 @@
-import { CircleReadDto, Configuration, OriginalAlbumReadDto, OriginalTrackReadDto, CircleApi, OriginalAlbumApi } from "app/backend-service-api";
-import ApiConfigurationProvider from "../domain/ApiConfigurationProvider";
-import GlobalStaticDataProvider from "../domain/GlobalStaticDataProvider";
-import { useLoadableController } from "src/utils/Loadable/LoadableController";
+import { CircleReadDto, Configuration, OriginalAlbumReadDto, OriginalTrackReadDto, CircleApi, OriginalAlbumApi } from 'app/backend-service-api';
+import ApiConfigurationProvider from '../domain/ApiConfigurationProvider';
+import GlobalStaticDataProvider from '../domain/GlobalStaticDataProvider';
+import { useLoadableController } from 'src/utils/Loadable/LoadableController';
 
 export default function useApiStaticDataProvider(
   apiConfigProvider: ApiConfigurationProvider<Configuration>,

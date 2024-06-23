@@ -1,9 +1,9 @@
 import { Duration } from 'src/models/Duration';
 import { DeepReadonly, Ref } from 'vue';
 
-export enum PlaybackEvents {}
+export enum PlaybackEvents { }
 
-export enum AudioEvents {}
+export enum AudioEvents { }
 
 export default interface AudioService {
   isPlaying: DeepReadonly<Ref<boolean>>;

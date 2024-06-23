@@ -6,7 +6,6 @@ import Logger from 'src/utils/Logger';
 import { TrackReadDto } from 'app/backend-service-api';
 import { TrackInfo } from 'src/models/TrackInfo';
 import { watch } from 'vue';
-import QueuedTrack from 'src/models/QueuedTrack';
 
 export default function useBrowserMediaSessionService(
   audioService: AudioService,

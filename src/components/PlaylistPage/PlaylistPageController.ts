@@ -1,11 +1,10 @@
-import { PlaylistReadDto, TrackReadDto } from 'app/backend-service-api/src';
+import { TrackReadDto } from 'app/backend-service-api/src';
 import { TrackInfo } from 'src/models/TrackInfo';
 import { PlaylistPageInputModel } from './models/PlaylistPageInputModel';
 import { LoadableState, useLoadableController } from 'src/utils/Loadable/LoadableController';
 import { PlaylistPageViewModel } from './models/PlaylistPageViewModel';
 import { Ref, ref, watch } from 'vue';
-import PlaylistService from 'src/services/domain/PlaylistService';
-import { AlbumApi, PlaylistApi, PlaylistItemsApi, PlaylistVisibility } from 'app/backend-service-api';
+import { AlbumApi, PlaylistApi, PlaylistVisibility } from 'app/backend-service-api';
 import * as services from 'src/services/_services';
 import { playlistService } from 'src/services/_services';
 

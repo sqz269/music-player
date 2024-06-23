@@ -1,4 +1,4 @@
-import { TimeSpan } from "app/backend-service-api/dist/models/TimeSpan";
+import { TimeSpan } from 'app/backend-service-api/dist/models/TimeSpan';
 
 export default interface HistoryTrackingService {
   initialize: () => Promise<void>;

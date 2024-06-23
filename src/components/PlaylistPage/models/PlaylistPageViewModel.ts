@@ -1,5 +1,5 @@
-import { PlaylistReadDto, TrackReadDto } from "app/backend-service-api/src";
-import { TrackInfo } from "src/models/TrackInfo";
+import { PlaylistReadDto, TrackReadDto } from 'app/backend-service-api/src';
+import { TrackInfo } from 'src/models/TrackInfo';
 
 export interface PlaylistPageViewModel {
   playlistId: string;

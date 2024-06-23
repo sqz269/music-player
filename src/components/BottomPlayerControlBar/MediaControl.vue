@@ -9,7 +9,7 @@
       :icon="outlinedSkipPrevious"
       @click="queueService?.playPrevious"
     >
-      <q-tooltip>{{ hasPrevious.value }}</q-tooltip>
+      <q-tooltip>Previous</q-tooltip>
     </q-btn>
 
     <q-btn
@@ -23,7 +23,7 @@
     >
       <q-tooltip>{{
         !audioService?.isPlaying.value ? 'Play' : 'Pause'
-      }}</q-tooltip>
+        }}</q-tooltip>
     </q-btn>
 
     <q-btn
