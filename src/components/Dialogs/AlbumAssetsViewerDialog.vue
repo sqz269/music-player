@@ -2,7 +2,7 @@
 <template>
   <q-dialog
     position="top"
-    backdrop-filter="brightness(60%)"
+    backdrop-filter="brightness(50%)"
   >
     <q-card style="width: 1200px; max-width: 80vw; margin-top: 10vh; border-radius: 5px;">
       <q-card-section>
@@ -16,7 +16,7 @@
         <q-table
           :rows="albumAssets"
           :columns="tableColumns"
-          class="transparent"
+          class="bg-transparent"
           row-key="id"
           flat
           hide-bottom

@@ -15,11 +15,10 @@
 </template>
 
 <script setup lang="ts">
-import { QToolbar, useQuasar } from 'quasar';
+import { QToolbar } from 'quasar';
 import TrackCard from './TrackCard.vue';
 import MediaControl from './MediaControl.vue';
 import QueueControl from './QueueControl.vue';
-import { ref } from 'vue';
 </script>
 
 <style lang="scss" scoped>

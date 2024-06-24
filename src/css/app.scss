@@ -25,14 +25,51 @@
 
 .body--dark .q-menu {
   backdrop-filter: blur(10px);
-  background-color: rgba($dark, 0.7);
-  box-shadow: 0 0 0;
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  background-color: rgba($dark, 0.6);
+  box-shadow: rgba($primary, 0.5) 0 0 10px;
+  border: 1px solid rgba($primary, 0.5);
 }
 
 .body--light .q-menu {
   backdrop-filter: blur(10px);
   background-color: rgba(255, 255, 255, 0.8);
-  box-shadow: 0 0 0;
-  border: 1px solid rgba(0, 0, 0, 0.5);
+  box-shadow: rgba($primary, 0.5) 0 0 10px;
+  border: 1px solid rgba($primary, 0.5);
+}
+
+// Customize the scrollbar
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba($chalky, 0.1);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba($light-dark, 0.3);
+  border-radius: 10px;
+
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba($light-dark, 0.5);
+  border-radius: 10px;
+
+}
+
+.body--dark .q-dialog .q-card {
+  backdrop-filter: blur(10px);
+  background-color: rgba($dark, 0.7);
+  border: 1px solid rgba($primary, 0.7);
+  box-shadow: rgba($primary, 0.7) 0 0 20px;
+}
+
+.body--light .q-dialog .q-card {
+  backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba($primary, 0.7);
+  box-shadow: rgba($primary, 0.7) 0 0 20px;
 }

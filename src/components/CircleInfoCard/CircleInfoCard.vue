@@ -5,7 +5,7 @@
     </template>
 
     <template #default="{ data }">
-      <q-card class="q-ma-md">
+      <q-card class="q-ma-md circle-info-card">
         <q-card-section>
           <DataSourceButton :data-sources="data?.DataSources" />
           <div class="text-h6">
@@ -25,6 +25,7 @@
               v-for="website in data?.WebsiteUrl"
               :key="website.url"
               clickable
+              color="secondary"
               class="q-mr-sm"
               :href="website.url"
               @click="UrlUtils.openUrlInNewTab(website.url)"
@@ -77,3 +78,9 @@ const startRadioForCircle = () => {
 
 props.controller.load(props.controller.inputModel.value)
 </script>
+
+<style scoped lang="scss">
+.body--dark .circle-info-card {
+  box-shadow: 0 0 0;
+}
+</style>

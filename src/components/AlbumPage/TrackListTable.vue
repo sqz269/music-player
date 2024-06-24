@@ -7,7 +7,7 @@
     >
       <q-table
         :rows="tracks"
-        class="transparent"
+        class="bg-transparent"
         :columns="columns"
         :pagination="pagination"
         separator="none"
@@ -23,7 +23,7 @@
               v-for="col in props.cols"
               :key="col.name"
               :props="props"
-              class="text-grey border-bottom-thin"
+              class="border-bottom-thin"
             >
               {{ col.label }}
             </q-th>
@@ -38,7 +38,6 @@
             <q-btn
               flat
               round
-              class="text-grey-5"
               size="13px"
               @mouseover="hoveringWhich = props.key"
               @mouseleave="hoveringWhich = undefined"
@@ -64,7 +63,6 @@
           <q-td :props="props">
             <q-chip
               square
-              class="bg-white-a-5"
               v-for="prop in props.value"
               :key="prop.id"
             >
@@ -174,20 +172,9 @@ const columns = [
     field: (row: TrackReadDto) => row.duration,
     format: (val: string) =>
       `${Duration.fromDurationString(val).toDurationString()}`,
-    classes: 'text-grey-4',
     sortable: false,
   },
 ];
 
 const props = defineProps<TrackListTableProps>();
 </script>
-
-<style scoped lang="scss">
-.body--light .track-list-table {
-  background-color: rgba($color: #dfdfdf, $alpha: 0.4)
-}
-
-.body--dark .track-list-table {
-  background-color: rgba($color: #000000, $alpha: 0.4)
-}
-</style>

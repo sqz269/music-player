@@ -38,6 +38,7 @@
         flat
         :icon="matRadio"
         class="q-mx-sm"
+        :color="radioService?.isActive ? 'primary' : 'white'"
         @click="radioService?.toggle()"
       >
         <q-tooltip>{{ radioService?.isActive }}</q-tooltip>
@@ -46,10 +47,7 @@
     <div class="col">
       <q-item class="full-width">
         <q-item-section side>
-          <q-icon
-            name="volume_up"
-            class="text-dark"
-          />
+          <q-icon name="volume_up" />
         </q-item-section>
         <q-item-section>
           <q-slider

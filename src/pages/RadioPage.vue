@@ -103,7 +103,7 @@
                 >
                   <template v-slot:no-option>
                     <q-item>
-                      <q-item-section class="text-grey">
+                      <q-item-section>
                         No results
                       </q-item-section>
                     </q-item>
@@ -125,7 +125,7 @@
                 >
                   <template v-slot:no-option>
                     <q-item>
-                      <q-item-section class="text-grey">
+                      <q-item-section>
                         No results
                       </q-item-section>
                     </q-item>
@@ -156,7 +156,7 @@
 
                   <template v-slot:no-option>
                     <q-item>
-                      <q-item-section class="text-grey">
+                      <q-item-section>
                         No results
                       </q-item-section>
                     </q-item>
