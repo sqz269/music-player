@@ -103,6 +103,13 @@
               >
                 <q-item-section>View Metadata</q-item-section>
               </q-item>
+              <q-item
+                clickable
+                @click="searchOnYouTube(props.row)"
+                v-close-popup
+              >
+                <q-item-section>Search On YouTube</q-item-section>
+              </q-item>
             </q-list>
           </q-menu>
         </template>
@@ -117,8 +124,9 @@ import { AlbumReadDto, TrackReadDto } from 'app/backend-service-api';
 import { QTable } from 'quasar';
 import { Duration } from 'src/models/Duration';
 import QueueService from 'src/services/domain/QueueService';
-import { inject, ref } from 'vue';
+import { inject, ref, TrackOpTypes } from 'vue';
 import { QueueAddMode } from 'src/services/domain/QueueService';
+import { UrlUtils } from 'src/utils/UrlUtils';
 
 interface TrackListTableProps {
   tracks: Map<AlbumReadDto, TrackReadDto[]>;
@@ -177,4 +185,17 @@ const columns = [
 ];
 
 const props = defineProps<TrackListTableProps>();
+
+const searchOnYouTube = (track: TrackReadDto) => {
+  const albumObject: AlbumReadDto = props.tracks.keys().next().value;
+
+  console.dir(albumObject);
+  const circleName = albumObject.albumArtist![0].name;
+
+  UrlUtils.openUrlInNewTab(
+    UrlUtils.constructYouTubeSearchQuery(
+      `${track.name._default} ${circleName}`
+    )
+  )
+};
 </script>
