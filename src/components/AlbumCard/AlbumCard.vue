@@ -105,7 +105,7 @@ const navigateToAlbum = () => {
   background: rgba($grey-9, 0.3);
   color: $grey-3;
   transition: background-color 0.3s linear, color 0.3s linear, border 0.3s linear;
-  border: 1px solid $grey-8;
+  border: 1px solid rgba($light-dark, 1);
   box-shadow: 0 0 0;
 
   .q-img {
@@ -118,7 +118,7 @@ const navigateToAlbum = () => {
   &:hover {
     background-color: rgba($grey-6, 0.5);
     color: $grey-1;
-    border: 1px solid $grey-1;
+    border: 1px solid $light-white;
 
     .q-img {
       opacity: 1;

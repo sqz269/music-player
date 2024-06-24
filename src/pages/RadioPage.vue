@@ -53,7 +53,7 @@
                     </template>
                   </q-input>
 
-                  <hr class="vertical-separator q-mx-md" />
+                  <hr class="vertical-separator q-mx-md bg-transparent transparent" />
 
                   <q-input
                     class="col"

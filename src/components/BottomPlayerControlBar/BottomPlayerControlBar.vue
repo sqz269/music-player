@@ -24,7 +24,7 @@ import { ref } from 'vue';
 
 <style lang="scss" scoped>
 .body--dark .toolbar {
-  background-color: #1D1D1D;
+  background-color: $dark;
   color: white;
 }
 
