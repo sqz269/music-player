@@ -4,15 +4,15 @@
     class="album-card cursor-pointer"
     @click="navigateToAlbum"
   >
-    <q-img
-      v-if="viewModel.albumCoverUrl"
-      :src="viewModel.albumCoverUrl"
-      style="width: 210px; height: 210px"
-      class="q-mx-md q-mt-md"
-      img-class="rounded-borders"
-      ratio="1"
-    >
-    </q-img>
+    <q-card-section>
+      <q-img
+        v-if="viewModel.albumCoverUrl"
+        :src="viewModel.albumCoverUrl"
+        img-class="rounded-borders"
+        ratio="1"
+      >
+      </q-img>
+    </q-card-section>
 
     <q-card-section>
       <div class="text-subtitle1">{{ viewModel.albumName }}</div>
@@ -73,32 +73,57 @@ const navigateToAlbum = () => {
 </script>
 
 <style scoped lang="scss">
-.album-card {
+.body--light .album-card {
   max-width: 245px;
   min-width: 245px;
-
   background: rgba($grey-2, 0.5);
   color: $grey-8;
-  transition: all 0.3s linear;
+  transition: background-color 0.3s linear, color 0.3s linear, box-shadow 0.3s linear;
 
   .q-img {
     border-radius: 4px;
-    transition: all 0.3s linear; // Smooth transition for the image effect
+    box-shadow: 0 0 0;
+    transition: opacity 0.3s linear, filter 0.3s linear, box-shadow 0.3s linear;
+  }
+
+  &:hover {
+    box-shadow: 0 0 15px rgba($grey-10, 0.5);
+    background-color: rgba($grey-2, 0.5);
+    color: $grey-10;
+
+    .q-img {
+      opacity: 0.9;
+      filter: brightness(95%);
+      box-shadow: 0 0 10px rgba($blue-grey-8, 0.6);
+    }
   }
 }
 
-.album-card:hover {
-  box-shadow: 0 0 15px rgba($grey-10, 0.5);
-  background-color: rgba($grey-2, 0.5);
-  color: $grey-10;
-  transition: all 0.3s linear;
+.body--dark .album-card {
+  max-width: 245px;
+  min-width: 245px;
+  background: rgba($grey-9, 0.3);
+  color: $grey-3;
+  transition: background-color 0.3s linear, color 0.3s linear, border 0.3s linear;
+  border: 1px solid $grey-8;
+  box-shadow: 0 0 0;
 
   .q-img {
+    border-radius: 4px;
     opacity: 0.9;
-    filter: brightness(90%); // Slightly increase brightness on hover
-    transition: all 0.3s linear; // Smooth transition for the image effect
+    filter: brightness(90%);
+    transition: opacity 0.3s linear, filter 0.3s linear;
+  }
 
-    box-shadow: 0 0 10px rgba($blue-grey-8, 0.6);
+  &:hover {
+    background-color: rgba($grey-6, 0.5);
+    color: $grey-1;
+    border: 1px solid $grey-1;
+
+    .q-img {
+      opacity: 1;
+      filter: brightness(100%);
+    }
   }
 }
 </style>

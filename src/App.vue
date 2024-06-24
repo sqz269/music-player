@@ -3,6 +3,7 @@
 </template>
 
 <script setup lang="ts">
+import { useQuasar } from 'quasar'
 import { onBeforeMount, provide } from 'vue';
 import * as services from 'src/services/_services';
 import AuthenticationService from './services/domain/AuthenticationService';
@@ -40,4 +41,8 @@ provide<GlobalStaticDataProvider>('globalStaticDataProvider', services.staticSta
 onBeforeMount(() => {
   services.initialize()
 });
+
+const $q = useQuasar()
+
+$q.dark.set(true)
 </script>

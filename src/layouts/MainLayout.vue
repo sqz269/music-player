@@ -1,8 +1,6 @@
 <template>
   <q-layout view="lHh LpR fFf">
-    <q-header class="bg-primary text-white">
-      <AppBar></AppBar>
-    </q-header>
+    <AppBar></AppBar>
 
     <q-drawer
       show-if-above
@@ -22,10 +20,7 @@
       </router-view>
     </q-page-container>
 
-    <q-footer
-      bordered
-      class="bg-white"
-    >
+    <q-footer bordered>
       <BottomPlayerControlBar></BottomPlayerControlBar>
     </q-footer>
   </q-layout>

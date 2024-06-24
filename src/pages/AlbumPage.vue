@@ -8,7 +8,7 @@
       <template #default="{ data }">
         <AlbumInfoSection :album="data!.masterAlbum" />
 
-        <div class="col-all q-mt-lg row">
+        <div class="col-all q-mt-lg row bg-red">
           <div class="col-12 q-pt-md">
             <q-btn
               fab

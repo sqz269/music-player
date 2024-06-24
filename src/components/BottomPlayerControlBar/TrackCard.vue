@@ -10,11 +10,11 @@
       />
 
       <q-card-section class="justify-around q-py-none">
-        <div class="text-dark text-h6">
+        <div class="text-h6">
           {{ currentTrack.name }}
         </div>
         <div
-          class="text-dark text-subtitle2 link"
+          class="text-subtitle2 link"
           @click="gotoAlbum(currentTrack!.albumId)"
         >
           {{ currentTrack.albumName }}
@@ -25,7 +25,7 @@
             class="metadata-entry"
           >
             <span
-              class="text-dark text-subtitle1 text-bold cursor-pointer artist-name"
+              class="text-subtitle1 text-bold cursor-pointer artist-name"
               v-for="(circle, index) in currentTrack.circle"
               :key="index"
               @click="gotoCircle(circle.id)"

@@ -10,3 +10,21 @@
 .link:hover {
   text-decoration: underline;
 }
+
+.bg-filter-blur-10 {
+  backdrop-filter: blur(10px);
+}
+
+.body--dark .q-menu {
+  backdrop-filter: blur(10px);
+  background-color: rgba(0, 0, 0, 0.8);
+  box-shadow: 0 0 0;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.body--light .q-menu {
+  backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 0;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}

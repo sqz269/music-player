@@ -1,5 +1,5 @@
 <template>
-  <q-toolbar class="q-pa-md">
+  <q-toolbar class="q-pa-md toolbar">
     <div class="row full-width full-height justify-evenly">
       <div class="col">
         <TrackCard></TrackCard>
@@ -15,8 +15,21 @@
 </template>
 
 <script setup lang="ts">
-import { QToolbar } from 'quasar';
+import { QToolbar, useQuasar } from 'quasar';
 import TrackCard from './TrackCard.vue';
 import MediaControl from './MediaControl.vue';
 import QueueControl from './QueueControl.vue';
+import { ref } from 'vue';
 </script>
+
+<style lang="scss" scoped>
+.body--dark .toolbar {
+  background-color: #1D1D1D;
+  color: white;
+}
+
+.body--light .toolbar {
+  background-color: white;
+  color: black;
+}
+</style>

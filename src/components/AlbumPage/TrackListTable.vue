@@ -1,5 +1,5 @@
 <template>
-  <div class="row full-width q-px-none q-pt-lg">
+  <div class="track-list-table row full-width q-px-none q-pt-lg">
     <div
       v-for="[disc, tracks] in props.tracks.entries()"
       v-bind:key="disc.id!"
@@ -181,3 +181,13 @@ const columns = [
 
 const props = defineProps<TrackListTableProps>();
 </script>
+
+<style scoped lang="scss">
+.body--light .track-list-table {
+  background-color: rgba($color: #dfdfdf, $alpha: 0.4)
+}
+
+.body--dark .track-list-table {
+  background-color: rgba($color: #000000, $alpha: 0.4)
+}
+</style>
