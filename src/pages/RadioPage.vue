@@ -53,7 +53,7 @@
                     </template>
                   </q-input>
 
-                  <hr class="vertical-separator q-mx-md" />
+                  <hr class="vertical-separator q-mx-md bg-transparent transparent" />
 
                   <q-input
                     class="col"
@@ -103,7 +103,7 @@
                 >
                   <template v-slot:no-option>
                     <q-item>
-                      <q-item-section class="text-grey">
+                      <q-item-section>
                         No results
                       </q-item-section>
                     </q-item>
@@ -125,7 +125,7 @@
                 >
                   <template v-slot:no-option>
                     <q-item>
-                      <q-item-section class="text-grey">
+                      <q-item-section>
                         No results
                       </q-item-section>
                     </q-item>
@@ -156,7 +156,7 @@
 
                   <template v-slot:no-option>
                     <q-item>
-                      <q-item-section class="text-grey">
+                      <q-item-section>
                         No results
                       </q-item-section>
                     </q-item>

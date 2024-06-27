@@ -6,10 +6,7 @@
     </template>
 
     <template #default="{ data }">
-      <div
-        class="row flex justify-between q-pa-md"
-        style="border-top: 1px solid #545454"
-      >
+      <div class="row flex justify-between q-pa-md">
         <div class="q-gutter-md col-sm-2 col-lg-2 col-xl-1">
           <q-select
             v-model="props.controller.inputModel.value.sortField"
@@ -44,8 +41,6 @@
       >
         <div class="q-gutter-md q-pa-md">
           <q-pagination
-            color="grey-3"
-            text-color="dark"
             v-model="data!.currentPage"
             :max="data!.totalPages"
             max-pages="10"

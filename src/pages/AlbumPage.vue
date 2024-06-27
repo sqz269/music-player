@@ -8,15 +8,13 @@
       <template #default="{ data }">
         <AlbumInfoSection :album="data!.masterAlbum" />
 
-        <div class="col-all q-mt-lg row">
+        <div class="row col-all q-mt-lg album-page-body">
           <div class="col-12 q-pt-md">
             <q-btn
               fab
-              class="q-mx-md"
               round
+              class="play-btn q-mx-md"
               :icon="outlinedPlayArrow"
-              color="black"
-              text-color="white"
               @click="playAlbum(data!, QueueAddMode.PLAY_IMMEDIATELY)"
             >
               <q-tooltip>Play</q-tooltip>
@@ -47,8 +45,7 @@
             <q-btn
               fab
               flat
-              class="q-mx-md"
-              round
+              class="like-btn q-mx-md"
               :icon="outlinedFavoriteBorder"
             >
               <q-tooltip>Save</q-tooltip>
@@ -324,4 +321,28 @@ onMounted(() => {
 });
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+.body--light .like-btn {
+  color: $negative
+}
+
+.body--dark .like-btn {
+  color: $negative
+}
+
+.body--dark .play-btn {
+  background-color: $accent
+}
+
+.body--light .play-btn {
+  background-color: $accent
+}
+
+.body--light .album-page-body {
+  background-color: rgba($color: #dfdfdf, $alpha: 0.4)
+}
+
+.body--dark .album-page-body {
+  background-color: rgba($color: #000000, $alpha: 0.4)
+}
+</style>

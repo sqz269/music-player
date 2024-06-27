@@ -4,7 +4,6 @@
       fab
       flat
       size="md"
-      :color="hasPrevious.value ? 'grey-10' : 'grey-5'"
       :disable="!hasPrevious.value"
       :icon="outlinedSkipPrevious"
       @click="queueService?.playPrevious"
@@ -17,20 +16,19 @@
       class="q-mx-md"
       round
       size="md"
-      color="grey-10"
+      color="accent"
       :icon="!audioService?.isPlaying.value ? outlinedPlayArrow : outlinedPause"
       @click="audioService?.togglePause"
     >
       <q-tooltip>{{
         !audioService?.isPlaying.value ? 'Play' : 'Pause'
-        }}</q-tooltip>
+      }}</q-tooltip>
     </q-btn>
 
     <q-btn
       flat
       fab
       size="md"
-      :color="hasNext.value ? 'grey-10' : 'grey-5'"
       :disable="!hasNext.value"
       :icon="outlinedSkipNext"
       @click="queueService?.playNext"

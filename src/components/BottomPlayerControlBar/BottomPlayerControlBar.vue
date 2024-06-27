@@ -1,5 +1,5 @@
 <template>
-  <q-toolbar class="q-pa-md">
+  <q-toolbar class="q-pa-md toolbar">
     <div class="row full-width full-height justify-evenly">
       <div class="col">
         <TrackCard></TrackCard>
@@ -20,3 +20,15 @@ import TrackCard from './TrackCard.vue';
 import MediaControl from './MediaControl.vue';
 import QueueControl from './QueueControl.vue';
 </script>
+
+<style lang="scss" scoped>
+.body--dark .toolbar {
+  background-color: $dark;
+  color: white;
+}
+
+.body--light .toolbar {
+  background-color: white;
+  color: black;
+}
+</style>

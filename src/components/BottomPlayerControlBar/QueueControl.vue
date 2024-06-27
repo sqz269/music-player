@@ -6,7 +6,7 @@
         dense
         flat
         :icon="outlinedRepeat"
-        class="text-dark q-mx-sm"
+        class="q-mx-sm"
       >
         <q-tooltip>Repeat</q-tooltip>
       </q-btn>
@@ -16,7 +16,7 @@
         dense
         flat
         :icon="outlinedShuffle"
-        class="text-dark q-mx-sm"
+        class="q-mx-sm"
       >
         <q-tooltip>Shuffle</q-tooltip>
       </q-btn>
@@ -26,7 +26,7 @@
         dense
         flat
         :icon="outlinedQueueMusic"
-        class="text-dark q-mx-sm"
+        class="q-mx-sm"
         @click="gotoQueuePage"
       >
         <q-tooltip>Queue</q-tooltip>
@@ -38,7 +38,7 @@
         flat
         :icon="matRadio"
         class="q-mx-sm"
-        :class="radioService?.isActive.value ? 'text-primary' : 'text-dark'"
+        :color="radioService?.isActive.value ? 'primary' : 'disabled'"
         @click="radioService?.toggle()"
       >
         <q-tooltip>{{ radioService?.isActive }}</q-tooltip>
@@ -47,10 +47,7 @@
     <div class="col">
       <q-item class="full-width">
         <q-item-section side>
-          <q-icon
-            name="volume_up"
-            class="text-dark"
-          />
+          <q-icon name="volume_up" />
         </q-item-section>
         <q-item-section>
           <q-slider

@@ -1,5 +1,5 @@
 <template>
-  <div class="row full-width q-px-none q-pt-lg">
+  <div class="track-list-table row full-width q-px-none q-pt-lg">
     <div
       v-for="[disc, tracks] in props.tracks.entries()"
       v-bind:key="disc.id!"
@@ -7,7 +7,7 @@
     >
       <q-table
         :rows="tracks"
-        class="transparent"
+        class="bg-transparent"
         :columns="columns"
         :pagination="pagination"
         separator="none"
@@ -23,7 +23,7 @@
               v-for="col in props.cols"
               :key="col.name"
               :props="props"
-              class="text-grey border-bottom-thin"
+              class="border-bottom-thin"
             >
               {{ col.label }}
             </q-th>
@@ -38,7 +38,6 @@
             <q-btn
               flat
               round
-              class="text-grey-5"
               size="13px"
               @mouseover="hoveringWhich = props.key"
               @mouseleave="hoveringWhich = undefined"
@@ -64,7 +63,6 @@
           <q-td :props="props">
             <q-chip
               square
-              class="bg-white-a-5"
               v-for="prop in props.value"
               :key="prop.id"
             >
@@ -105,6 +103,13 @@
               >
                 <q-item-section>View Metadata</q-item-section>
               </q-item>
+              <q-item
+                clickable
+                @click="searchOnYouTube(props.row)"
+                v-close-popup
+              >
+                <q-item-section>Search On YouTube</q-item-section>
+              </q-item>
             </q-list>
           </q-menu>
         </template>
@@ -119,8 +124,9 @@ import { AlbumReadDto, TrackReadDto } from 'app/backend-service-api';
 import { QTable } from 'quasar';
 import { Duration } from 'src/models/Duration';
 import QueueService from 'src/services/domain/QueueService';
-import { inject, ref } from 'vue';
+import { inject, ref, TrackOpTypes } from 'vue';
 import { QueueAddMode } from 'src/services/domain/QueueService';
+import { UrlUtils } from 'src/utils/UrlUtils';
 
 interface TrackListTableProps {
   tracks: Map<AlbumReadDto, TrackReadDto[]>;
@@ -174,10 +180,22 @@ const columns = [
     field: (row: TrackReadDto) => row.duration,
     format: (val: string) =>
       `${Duration.fromDurationString(val).toDurationString()}`,
-    classes: 'text-grey-4',
     sortable: false,
   },
 ];
 
 const props = defineProps<TrackListTableProps>();
+
+const searchOnYouTube = (track: TrackReadDto) => {
+  const albumObject: AlbumReadDto = props.tracks.keys().next().value;
+
+  console.dir(albumObject);
+  const circleName = albumObject.albumArtist![0].name;
+
+  UrlUtils.openUrlInNewTab(
+    UrlUtils.constructYouTubeSearchQuery(
+      `${track.name._default} ${circleName}`
+    )
+  )
+};
 </script>
