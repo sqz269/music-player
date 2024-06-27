@@ -25,14 +25,14 @@
 
 .body--dark .q-menu {
   backdrop-filter: blur(10px);
-  background-color: rgba($dark, 0.6);
+  background-color: rgba($dark, 0.7);
   box-shadow: rgba($primary, 0.5) 0 0 10px;
   border: 1px solid rgba($primary, 0.5);
 }
 
 .body--light .q-menu {
   backdrop-filter: blur(10px);
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.7);
   box-shadow: rgba($primary, 0.5) 0 0 10px;
   border: 1px solid rgba($primary, 0.5);
 }
@@ -69,7 +69,7 @@
 
 .body--light .q-dialog .q-card {
   backdrop-filter: blur(10px);
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 255, 255, 0.9);
   border: 1px solid rgba($primary, 0.7);
   box-shadow: rgba($primary, 0.7) 0 0 20px;
 }

@@ -38,7 +38,7 @@
         flat
         :icon="matRadio"
         class="q-mx-sm"
-        :color="radioService?.isActive ? 'primary' : 'white'"
+        :color="radioService?.isActive.value ? 'primary' : 'disabled'"
         @click="radioService?.toggle()"
       >
         <q-tooltip>{{ radioService?.isActive }}</q-tooltip>

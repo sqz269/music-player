@@ -3,6 +3,8 @@
     <q-btn
       v-if="!authService?.isAuthenticated.value"
       @click="authService?.login"
+      rounded
+      color="secondary"
     >
       Login
     </q-btn>
@@ -12,6 +14,8 @@
       :icon="outlinedAccountCircle"
       flat
       rounded
+      unelevated
+      color="secondary"
     >
       <q-list>
         <q-item

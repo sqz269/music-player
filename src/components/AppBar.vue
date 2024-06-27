@@ -25,23 +25,8 @@
 
       <AccountButton />
 
-      <q-btn
-        round
-        dense
-        flat
-        size="lg"
-        :icon="outlinedBugReport"
-        @click="goDebug"
-      ></q-btn>
+      <DropdownSettingsButton />
 
-      <q-btn
-        round
-        dense
-        flat
-        size="lg"
-        :icon="outlinedArrowForward"
-        @click="toggleDarkMode"
-      ></q-btn>
     </q-toolbar>
   </q-header>
 
@@ -51,11 +36,14 @@
 import {
   outlinedArrowForward,
   outlinedArrowBack,
-  outlinedBugReport,
+  outlinedLightMode,
+  outlinedDarkMode,
 } from '@quasar/extras/material-icons-outlined';
 import AccountButton from './AccountButton.vue';
 import { useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
+import { computed } from 'vue';
+import DropdownSettingsButton from './DropdownSettingsButton.vue';
 
 const $q = useQuasar();
 const $router = useRouter();
@@ -68,11 +56,9 @@ const goForward = () => {
   $router.forward();
 };
 
-const goDebug = () => {
-  $router.push({
-    name: 'Debug',
-  });
-};
+const themeIcon = computed(() => {
+  return $q.dark.isActive ? outlinedLightMode : outlinedDarkMode;
+});
 
 const toggleDarkMode = () => {
   $q.dark.set(!$q.dark.isActive);
