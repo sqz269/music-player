@@ -1,0 +1,26 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap");
+#artists .artist-name[data-v-74c424d0]:not(:last-child)::after {
+  content: ', ';
+}
+.q-img[data-v-74c424d0] {
+  border-radius: 4px;
+}
+
+.body--light .like-btn[data-v-15368368] {
+  color: #f44747;
+}
+.body--dark .like-btn[data-v-15368368] {
+  color: #f44747;
+}
+.body--dark .play-btn[data-v-15368368] {
+  background-color: #2bbac5;
+}
+.body--light .play-btn[data-v-15368368] {
+  background-color: #2bbac5;
+}
+.body--light .album-page-body[data-v-15368368] {
+  background-color: rgba(223, 223, 223, 0.4);
+}
+.body--dark .album-page-body[data-v-15368368] {
+  background-color: rgba(0, 0, 0, 0.4);
+}

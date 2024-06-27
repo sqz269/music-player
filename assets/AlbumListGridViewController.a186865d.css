@@ -1,0 +1,47 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap");
+.body--light .album-card[data-v-464ea01b] {
+  max-width: 245px;
+  min-width: 245px;
+  background: rgba(245, 245, 245, 0.5);
+  color: #616161;
+  transition: background-color 0.3s linear, color 0.3s linear, box-shadow 0.3s linear;
+}
+.body--light .album-card .q-img[data-v-464ea01b] {
+  border-radius: 4px;
+  box-shadow: 0 0 0;
+  transition: opacity 0.3s linear, filter 0.3s linear, box-shadow 0.3s linear;
+}
+.body--light .album-card[data-v-464ea01b]:hover {
+  box-shadow: 0 0 15px rgba(33, 33, 33, 0.5);
+  background-color: rgba(245, 245, 245, 0.5);
+  color: #212121;
+}
+.body--light .album-card:hover .q-img[data-v-464ea01b] {
+  opacity: 0.9;
+  filter: brightness(95%);
+  box-shadow: 0 0 10px rgba(69, 90, 100, 0.6);
+}
+.body--dark .album-card[data-v-464ea01b] {
+  max-width: 245px;
+  min-width: 245px;
+  background: rgba(66, 66, 66, 0.3);
+  color: #eeeeee;
+  transition: background-color 0.3s linear, color 0.3s linear, border 0.3s linear;
+  border: 1px solid #7f848e;
+  box-shadow: 0 0 0;
+}
+.body--dark .album-card .q-img[data-v-464ea01b] {
+  border-radius: 4px;
+  opacity: 0.9;
+  filter: brightness(90%);
+  transition: opacity 0.3s linear, filter 0.3s linear;
+}
+.body--dark .album-card[data-v-464ea01b]:hover {
+  background-color: rgba(158, 158, 158, 0.5);
+  color: #fafafa;
+  border: 1px solid #abb2bf;
+}
+.body--dark .album-card:hover .q-img[data-v-464ea01b] {
+  opacity: 1;
+  filter: brightness(100%);
+}
