@@ -88,5 +88,4 @@ const props = defineProps<{
   controller: AlbumListGridViewController;
 }>();
 
-props.controller.load(props.controller.inputModel.value);
 </script>

@@ -20,11 +20,12 @@ import AlbumListGridViewViewModel from 'src/components/AlbumListGridView/models/
 import ApiConfigurationProvider from 'src/services/domain/ApiConfigurationProvider';
 import Logger from 'src/utils/Logger';
 import { computed, inject, onBeforeMount, Ref, ref, watch } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import useCircleInfoCardController, { CircleInfoCardController } from 'src/components/CircleInfoCard/CircleInfoCardController';
 import CircleInfoCard from 'src/components/CircleInfoCard/CircleInfoCard.vue';
 
 const $router = useRouter();
+const $route = useRoute();
 const apiConfigProvider =
   inject<ApiConfigurationProvider<Configuration>>('apiConfigProvider');
 if (!apiConfigProvider) {
@@ -67,6 +68,40 @@ const circleAlbumLoadFunction = computed(() => {
   };
 });
 
+const urlStateDecoder = computed((): AlbumListGridViewInputModel => {
+  console.log('urlStateDecoder');
+
+  // Page is going to be directly in the path while sorting options are going to be in query params
+  // query params are going to be optional
+  const pageParam = $route.params.page;
+  const page = pageParam ? parseInt(pageParam as string) : 1;
+
+  const sortField = $route.query.sortField as AlbumOrderOptions | undefined;
+  const sortOrder = $route.query.sortOrder as 'Ascending' | 'Descending' | undefined;
+
+  console.log(`Decoded page: ${page}, sortField: ${sortField}, sortOrder: ${sortOrder}`);
+
+  return {
+    page,
+    sortField: sortField || AlbumOrderOptions.Date,
+    sortOrder: sortOrder || 'Ascending',
+  };
+});
+
+const urlStateEncoder = (state: AlbumListGridViewInputModel) => {
+  // Push the page to the path and sorting options to query params
+  $router.push({
+    name: 'CircleAlbums',
+    params: {
+      page: state.page,
+    },
+    query: {
+      sortField: state.sortField,
+      sortOrder: state.sortOrder,
+    },
+  });
+}
+
 onBeforeMount(() => {
   console.log('onBeforeMount');
 
@@ -75,21 +110,18 @@ onBeforeMount(() => {
     throw new Error('Circle ID not found in route');
   }
 
-  const pageParam = $router.currentRoute.value.params.page;
-  if (pageParam === undefined) {
-    throw new Error('Page not found in route');
-  }
-
   circleId.value = circleIdParam as string;
   console.log('circleId', circleId.value);
 
   circleAlbumController = useAlbumListGridViewController({
     load: circleAlbumLoadFunction.value,
     initialInputState: {
-      page: parseInt(pageParam as string),
+      page: 1,
       sortField: AlbumOrderOptions.Date,
       sortOrder: 'Ascending',
     },
+    urlStateDecoder,
+    urlStateEncoder,
   });
 
   circleInfoController = useCircleInfoCardController({
@@ -98,28 +130,6 @@ onBeforeMount(() => {
       circleId: circleId.value,
     },
   });
-
-  watch(
-    () => circleAlbumController!.viewModelController.state.value?.currentPage,
-    (newValue, oldValue) => {
-      logger.info(`Page changed from ${oldValue} to ${newValue}`);
-      $router.push({
-        name: 'CircleAlbums',
-        params: {
-          circleId: circleId.value,
-          page: newValue,
-        },
-      });
-    }
-  );
-
-  watch(
-    () => $router.currentRoute.value.params.page,
-    (newValue, oldValue) => {
-      logger.info(`Page changed from ${oldValue} to ${newValue}`);
-      circleAlbumController?.changePage(parseInt(newValue as string));
-    }
-  );
 
   watch(
     () => $router.currentRoute.value.params.circleId,
