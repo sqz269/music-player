@@ -19,7 +19,7 @@ import AlbumListGridViewInputModel from 'src/components/AlbumListGridView/models
 import AlbumListGridViewViewModel from 'src/components/AlbumListGridView/models/AlbumListGridViewViewModel';
 import ApiConfigurationProvider from 'src/services/domain/ApiConfigurationProvider';
 import Logger from 'src/utils/Logger';
-import { computed, inject, onBeforeMount, Ref, ref, watch } from 'vue';
+import { computed, inject, onActivated, onBeforeMount, onDeactivated, Ref, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import useCircleInfoCardController, { CircleInfoCardController } from 'src/components/CircleInfoCard/CircleInfoCardController';
 import CircleInfoCard from 'src/components/CircleInfoCard/CircleInfoCard.vue';
@@ -69,10 +69,7 @@ const circleAlbumLoadFunction = computed(() => {
 });
 
 const urlStateDecoder = computed((): AlbumListGridViewInputModel => {
-  console.log('urlStateDecoder');
-
-  // Page is going to be directly in the path while sorting options are going to be in query params
-  // query params are going to be optional
+  // Ensure $route is referenced inside the computed function
   const pageParam = $route.params.page;
   const page = pageParam ? parseInt(pageParam as string) : 1;
 
@@ -135,8 +132,14 @@ onBeforeMount(() => {
     () => $router.currentRoute.value.params.circleId,
     (newValue, oldValue) => {
       logger.info(`Circle ID changed from ${oldValue} to ${newValue}`);
+
+      if (newValue === undefined || newValue === oldValue) {
+        return;
+      }
+
       circleId.value = newValue as string;
       circleInfoController?.changeCircleId(circleId.value);
+      circleAlbumController?.changePage(1);
     }
   );
 
