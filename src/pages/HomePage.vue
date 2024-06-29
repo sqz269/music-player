@@ -10,7 +10,6 @@ import {
   Configuration,
   AlbumOrderOptions,
 } from 'app/backend-service-api';
-import { route } from 'quasar/wrappers';
 import AlbumListGridView from 'src/components/AlbumListGridView/AlbumListGridView.vue';
 import useAlbumListGridViewController, {
   AlbumListGridViewController,
@@ -19,8 +18,10 @@ import AlbumListGridViewInputModel from 'src/components/AlbumListGridView/models
 import AlbumListGridViewViewModel from 'src/components/AlbumListGridView/models/AlbumListGridViewViewModel';
 import ApiConfigurationProvider from 'src/services/domain/ApiConfigurationProvider';
 import Logger from 'src/utils/Logger';
-import { computed, inject, onBeforeMount, ref, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { computed, inject, onActivated, onBeforeMount, onDeactivated, ref, watch } from 'vue';
+import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router';
+
+const isActive = ref(true);
 
 const $router = useRouter();
 const $route = useRoute();
@@ -33,7 +34,6 @@ const logger = Logger.getLogger('HomePage');
 let controller: AlbumListGridViewController | null = null;
 
 const albumListGridViewLoader = async (state: AlbumListGridViewInputModel) => {
-  logger.info(`Loading page ${JSON.stringify(state)}`);
   const albumsApi = new AlbumApi(
     apiConfigProvider.getApiConfigurationWithAuth()
   );
@@ -59,15 +59,6 @@ const albumListGridViewLoader = async (state: AlbumListGridViewInputModel) => {
   } as AlbumListGridViewViewModel;
 };
 
-
-watch(
-  $route,
-  () => {
-    console.log('Route changed');
-  },
-  { immediate: true }
-)
-
 const urlStateDecoder = computed((): AlbumListGridViewInputModel => {
   // Page is going to be directly in the path while sorting options are going to be in query params
   // query params are going to be optional
@@ -76,8 +67,6 @@ const urlStateDecoder = computed((): AlbumListGridViewInputModel => {
 
   const sortField = $route.query.sortField as AlbumOrderOptions | undefined;
   const sortOrder = $route.query.sortOrder as 'Ascending' | 'Descending' | undefined;
-
-  console.log(`Decoded page: ${page}, sortField: ${sortField}, sortOrder: ${sortOrder}`);
 
   return {
     page,
@@ -116,5 +105,28 @@ onBeforeMount(() => {
     urlStateDecoder,
     urlStateEncoder,
   });
+
+  watch($route, () => {
+    if (isActive.value) {
+      controller?.reload();
+    }
+  });
+});
+
+onActivated(() => {
+  isActive.value = true;
+});
+
+// we cannot use onDeactivated call because the route will change before
+// the component is deactivated, which will cause the route change watch
+// to be triggered and the component to reload and overwrite the new route
+// so we use onBeforeRouteLeave instead to ensure the route change watch is not
+// triggered
+// onDeactivated(() => {
+// });
+
+onBeforeRouteLeave((to, from, next) => {
+  isActive.value = false;
+  next();
 });
 </script>

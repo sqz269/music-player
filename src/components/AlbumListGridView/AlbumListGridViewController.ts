@@ -15,6 +15,7 @@ export type AlbumListGridViewController = {
   urlStateEncoder?: (state: AlbumListGridViewInputModel) => void;
 
   load: (state: AlbumListGridViewInputModel) => Promise<void>;
+  reload: () => Promise<void>;
   changePage: (page: number) => Promise<void>;
   changeSortOrder: (sortOrder: SortOrder) => Promise<void>;
   changeSortField: (sortField: AlbumOrderOptions) => Promise<void>;
@@ -68,6 +69,16 @@ export default function useAlbumListGridViewController(
     };
   };
 
+  const reload = async () => {
+    // Decode the current url state
+    if (parameter.urlStateDecoder) {
+      console.log('Controller Loading due to reload call');
+      inputModel.value = parameter.urlStateDecoder.value;
+    }
+
+    await load(inputModel.value);
+  }
+
   watch(
     inputModel,
     async (newInputModel, oldInputModel) => {
@@ -95,8 +106,9 @@ export default function useAlbumListGridViewController(
     inputModel,
 
     load,
+    reload,
     changePage,
     changeSortOrder,
     changeSortField,
-  } as AlbumListGridViewController;
+  };
 }
