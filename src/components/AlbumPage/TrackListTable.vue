@@ -194,7 +194,7 @@ const searchOnYouTube = (track: TrackReadDto) => {
 
   UrlUtils.openUrlInNewTab(
     UrlUtils.constructYouTubeSearchQuery(
-      `${track.name._default} ${circleName}`
+      `"${track?.name?._default}" ${albumObject.name?._default} ${circleName}`
     )
   )
 };

@@ -220,16 +220,16 @@ import { CircleReadDto, OriginalAlbumReadDto, OriginalTrackReadDto } from 'app/b
 import GlobalStaticDataProvider from 'src/services/domain/GlobalStaticDataProvider';
 import RadioService, { RadioFilters } from 'src/services/domain/RadioService';
 import { useCombinedLoadableAwaiter } from 'src/utils/Loadable/CombinedLoadableAwaiter';
-import { inject, reactive, Ref, ref, watch, toRaw } from 'vue';
+import { inject, reactive, Ref, ref, watch, toRaw, onMounted } from 'vue';
 import LoadableElement from 'src/utils/Loadable/LoadableElement.vue';
 import { LoadingStatus } from 'src/utils/Loadable/LoadableController';
 
 interface RadioPageFilters {
   releaseDateEnd: string | null;
   releaseDateBegin: string | null;
-  circles: string[];
-  originalAlbums: string[];
-  originalTracks: string[];
+  circles: SelectOptions[];
+  originalAlbums: SelectOptions[];
+  originalTracks: TrackSelectOptions[];
 }
 
 // Inject services
@@ -248,13 +248,14 @@ const staticDataAwaiter = useCombinedLoadableAwaiter(
   staticData!.originalTracks
 );
 
-const filters = reactive({
+const filters = reactive<RadioPageFilters>({
   releaseDateEnd: null as string | null,
   releaseDateBegin: null as string | null,
   circles: [] as SelectOptions[],
   originalAlbums: [] as SelectOptions[],
   originalTracks: [] as TrackSelectOptions[],
 });
+
 const toRadioFilters = (): RadioFilters => {
   const raw = toRaw(filters);
 
@@ -270,8 +271,29 @@ const toRadioFilters = (): RadioFilters => {
   };
 };
 
+const fromRadioFilters = (radioFilters: RadioFilters): RadioPageFilters => {
+  const circles = radioFilters?.circles?.map((c) => circleOptions.value.find((o) => o.key === c)!) ?? [];
+  const originalAlbums = radioFilters?.originalAlbums?.map((oa) =>
+    originalAlbumsOptions.value.find((o) => o.key === oa)!
+  ) ?? [];
+  const originalTracks = radioFilters?.originalTracks?.map((ot) => {
+    const found = originalTracksOptions.value.find((o) => ot in o.aliasPks);
+    if (!found) {
+      throw new Error('Original track not found');
+    }
+    return found;
+  }) ?? [];
+
+  return {
+    releaseDateEnd: radioFilters.releaseDateEnd?.toISOString() ?? null,
+    releaseDateBegin: radioFilters.releaseDateBegin?.toISOString() ?? null,
+    circles,
+    originalAlbums,
+    originalTracks,
+  };
+};
+
 const applyRadioSettings = () => {
-  console.log('Applying radio settings', filters);
   radioService?.setFilters(toRadioFilters());
 };
 
@@ -321,21 +343,34 @@ const originalTracksDtoToSelectOptions = (dtos: OriginalTrackReadDto[]): TrackSe
 
 const circleOptions = ref<SelectOptions[]>([]);
 const originalAlbumsOptions = ref<SelectOptions[]>([]);
-const originalTracksOptions = ref<SelectOptions[]>([]);
+const originalTracksOptions = ref<TrackSelectOptions[]>([]);
+
+const restoreCurrentFilters = () => {
+  const radioFilters = radioService?.filters.value;
+  if (radioFilters) {
+    const existingFilters = fromRadioFilters(radioFilters as RadioFilters);
+    Object.assign(filters, existingFilters);
+  }
+};
+
+const initializeOptions = () => {
+  circleOptions.value = staticData!.circles.state!.value!.map(
+    (dto) => circleDtoToSelectOption(dto)
+  );
+
+  originalAlbumsOptions.value = staticData!.originalAlbums.state!.value!.map(
+    (dto) => originalAlbumsDtoToSelectOption(dto)
+  );
+
+  originalTracksOptions.value = originalTracksDtoToSelectOptions(
+    staticData!.originalTracks.state!.value!
+  );
+}
 
 watch(staticDataAwaiter.status, (status) => {
   if (status === LoadingStatus.Success) {
-    circleOptions.value = staticData!.circles.state!.value!.map(
-      (dto) => circleDtoToSelectOption(dto)
-    );
-
-    originalAlbumsOptions.value = staticData!.originalAlbums.state!.value!.map(
-      (dto) => originalAlbumsDtoToSelectOption(dto)
-    );
-
-    originalTracksOptions.value = originalTracksDtoToSelectOptions(
-      staticData!.originalTracks.state!.value!
-    );
+    initializeOptions();
+    restoreCurrentFilters();
   }
 });
 
@@ -367,4 +402,12 @@ const originalTracksFilterFn = (val: string, update: (callback: () => void) => v
     );
   });
 };
+
+onMounted(() => {
+  // Check if static data is already loaded
+  if (staticDataAwaiter.status.value === LoadingStatus.Success) {
+    initializeOptions();
+    restoreCurrentFilters();
+  }
+});
 </script>
