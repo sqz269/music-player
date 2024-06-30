@@ -1,10 +1,9 @@
-import { TrackReadDto } from 'app/backend-service-api/src';
 import { TrackInfo } from 'src/models/TrackInfo';
 import { PlaylistPageInputModel } from './models/PlaylistPageInputModel';
 import { LoadableState, useLoadableController } from 'src/utils/Loadable/LoadableController';
 import { PlaylistPageViewModel } from './models/PlaylistPageViewModel';
 import { Ref, ref, watch } from 'vue';
-import { AlbumApi, PlaylistApi, PlaylistVisibility } from 'app/backend-service-api';
+import { TrackApi, PlaylistApi, PlaylistVisibility, TrackReadDto } from 'app/backend-service-api';
 import * as services from 'src/services/_services';
 import { playlistService } from 'src/services/_services';
 
@@ -48,11 +47,11 @@ export const usePlaylistPageController = (
 
       // Fetch actual track infos from the backend
       // Block size is 50, so we need to fetch in blocks
-      const albumsApi = new AlbumApi(services.apiConfigurationProvider?.getApiConfiguration());
+      const trackApi = new TrackApi(services.apiConfigurationProvider?.getApiConfiguration());
       const playlistTracks: TrackReadDto[] = [];
       for (let i = 0; i < allTrackIds.length; i += blockSize) {
         const block = allTrackIds.slice(i, i + blockSize);
-        const tracks = await albumsApi.getTracks(
+        const tracks = await trackApi.getTracks(
           {
             requestBody: block
           }
