@@ -8,4 +8,5 @@ export * from './InternalApi';
 export * from './OriginalAlbumApi';
 export * from './PlaylistApi';
 export * from './PlaylistItemsApi';
+export * from './TrackApi';
 export * from './UserProfileApi';
