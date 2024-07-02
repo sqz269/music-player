@@ -218,11 +218,12 @@
 <script setup lang="ts">
 import { CircleReadDto, OriginalAlbumReadDto, OriginalTrackReadDto } from 'app/backend-service-api/dist';
 import GlobalStaticDataProvider from 'src/services/domain/GlobalStaticDataProvider';
-import RadioService, { RadioFilters } from 'src/services/domain/RadioService';
+import RadioService from 'src/services/domain/RadioService';
 import { useCombinedLoadableAwaiter } from 'src/utils/Loadable/CombinedLoadableAwaiter';
 import { inject, reactive, Ref, ref, watch, toRaw, onMounted } from 'vue';
 import LoadableElement from 'src/utils/Loadable/LoadableElement.vue';
 import { LoadingStatus } from 'src/utils/Loadable/LoadableController';
+import { TrackQueryFilters } from 'src/models/TrackQueryFilters';
 
 interface RadioPageFilters {
   releaseDateEnd: string | null;
@@ -256,22 +257,22 @@ const filters = reactive<RadioPageFilters>({
   originalTracks: [] as TrackSelectOptions[],
 });
 
-const toRadioFilters = (): RadioFilters => {
+const toRadioFilters = (): TrackQueryFilters => {
   const raw = toRaw(filters);
 
   const releaseDateEnd = raw.releaseDateEnd ? new Date(raw.releaseDateEnd) : null;
   const releaseDateBegin = raw.releaseDateBegin ? new Date(raw.releaseDateBegin) : null;
 
   return {
-    releaseDateEnd,
-    releaseDateBegin,
+    releaseDateEnd: (releaseDateEnd || undefined),
+    releaseDateBegin: (releaseDateBegin || undefined),
     circles: raw.circles.map((c) => c.key),
     originalAlbums: raw.originalAlbums.map((oa) => oa.key),
     originalTracks: raw.originalTracks.flatMap((ot) => ot.aliasPks),
   };
 };
 
-const fromRadioFilters = (radioFilters: RadioFilters): RadioPageFilters => {
+const fromRadioFilters = (radioFilters: TrackQueryFilters): RadioPageFilters => {
   const circles = radioFilters?.circles?.map((c) => circleOptions.value.find((o) => o.key === c)!) ?? [];
   const originalAlbums = radioFilters?.originalAlbums?.map((oa) =>
     originalAlbumsOptions.value.find((o) => o.key === oa)!
@@ -348,7 +349,7 @@ const originalTracksOptions = ref<TrackSelectOptions[]>([]);
 const restoreCurrentFilters = () => {
   const radioFilters = radioService?.filters.value;
   if (radioFilters) {
-    const existingFilters = fromRadioFilters(radioFilters as RadioFilters);
+    const existingFilters = fromRadioFilters(radioFilters as TrackQueryFilters);
     Object.assign(filters, existingFilters);
   }
 };

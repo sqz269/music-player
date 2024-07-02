@@ -37,6 +37,11 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/AlbumPage.vue'),
       },
       {
+        path: 'original/:originalId/tracks/:page',
+        name: 'OriginalTrack',
+        component: () => import('pages/OriginalTracksPage.vue'),
+      },
+      {
         path: 'circle/:circleId/albums/:page',
         name: 'CircleAlbums',
         component: () => import('pages/CirclePage.vue'),

@@ -1,0 +1,47 @@
+<template>
+  <q-item
+    v-ripple
+    clickable
+  >
+    <q-item-section
+      side
+      class='items-center'
+      v-if="props.index"
+      style="width: 3rem;"
+    >
+      <q-item-label>{{ props.index }}</q-item-label>
+    </q-item-section>
+    <q-item-section avatar>
+      <q-avatar
+        rounded
+        size="72px"
+      >
+        <img :src="props.track.album?.thumbnail?.small?.url" />
+      </q-avatar>
+    </q-item-section>
+    <q-item-section class="flex justify-around">
+      <div>
+        <q-item-label class="text-subtitle1">{{ props.track.name?._default }}</q-item-label>
+        <q-item-label
+          caption
+          lines="1"
+          class="text-bold"
+        >{{ props.track.album?.name?._default }}</q-item-label>
+      </div>
+      <q-item-label
+        caption
+        lines="1"
+      >{{ props.track.album?.albumArtist?.map(c => c.name).join(', ') }}</q-item-label>
+    </q-item-section>
+  </q-item>
+</template>
+
+<script setup lang="ts">
+import { defineProps } from 'vue';
+import { TrackReadDto } from 'app/backend-service-api';
+
+const props = defineProps<{
+  index?: number;
+  track: TrackReadDto;
+}>();
+</script>
