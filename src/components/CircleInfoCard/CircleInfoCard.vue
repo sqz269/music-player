@@ -66,11 +66,7 @@ const radioService = inject<RadioService>('radioService');
 
 const startRadioForCircle = () => {
   radioService?.setFilters({
-    releaseDateBegin: null,
-    releaseDateEnd: null,
     circles: [props.controller.inputModel.value.circleId],
-    originalAlbums: null,
-    originalTracks: null,
   });
 
   radioService?.activate();
