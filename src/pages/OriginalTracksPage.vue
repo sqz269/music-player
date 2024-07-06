@@ -1,18 +1,104 @@
 <template>
+  <LoadableElement :state-controller="originalTrackInfoController">
+    <template #loading>
+      <q-spinner-gears />
+    </template>
+
+    <template #default="{ data }">
+      <q-menu
+        context-menu
+        fit
+      >
+        <q-list>
+          <q-item
+            clickable
+            v-close-popup
+          >
+            <q-item-section>Play Next</q-item-section>
+          </q-item>
+          <q-item
+            clickable
+            v-close-popup
+          >
+            <q-item-section>Add to Queue</q-item-section>
+          </q-item>
+          <q-item
+            clickable
+            v-close-popup
+          >
+            <q-item-section>Copy Track Url</q-item-section>
+          </q-item>
+          <q-item
+            clickable
+            v-close-popup
+          >
+            <q-item-section>View Metadata</q-item-section>
+          </q-item>
+          <q-item
+            clickable
+            v-close-popup
+          >
+            <q-item-section>Search On YouTube</q-item-section>
+          </q-item>
+        </q-list>
+      </q-menu>
+      <q-card class="q-ma-md circle-info-card">
+        <q-card-section>
+          <div class="text-h6">
+            {{ data?.title?.en }}
+          </div>
+
+          <div class="text-subtitle1">
+            Album: {{ data?.album?.fullName?.en }}
+          </div>
+        </q-card-section>
+
+        <q-separator />
+
+        <q-card-section>
+          <q-btn
+            color="primary"
+            class="rounded-borders"
+            label="Start Radio"
+            @click="radioPlay"
+          >
+          </q-btn>
+        </q-card-section>
+      </q-card>
+    </template>
+  </LoadableElement>
+
   <TrackListView :controller="trackListViewController"></TrackListView>
 </template>
 
 <script setup lang="ts">
-import { SortOrder, TrackOrderOptions } from 'app/backend-service-api';
+import { OriginalAlbumApi, OriginalTrackReadDto, SortOrder, TrackOrderOptions } from 'app/backend-service-api';
 import { TrackListViewInputModel } from 'src/components/TrackListView/models/TrackListViewInputMode';
 import TrackListView from 'src/components/TrackListView/TrackListView.vue';
 import useTrackListViewController from 'src/components/TrackListView/TrackListViewController';
-import { computed, watch } from 'vue';
+import { apiConfigurationProvider, radioService } from 'src/services/_services';
+import { useLoadableController } from 'src/utils/Loadable/LoadableController';
+import LoadableElement from 'src/utils/Loadable/LoadableElement.vue';
+import { computed, onMounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 // Injected services
 const $router = useRouter();
 const $route = useRoute();
+
+const originalTrackInfoController = useLoadableController<OriginalTrackReadDto>();
+
+const _loadOriginalTrackInfo = async () => {
+  originalTrackInfoController.setLoading();
+  const originalTrackId = $route.params.originalId as string;
+
+  const originalApi = new OriginalAlbumApi(apiConfigurationProvider.getApiConfiguration());
+  const result = await originalApi.getOriginalTrack({
+    id: originalTrackId,
+  });
+
+  originalTrackInfoController.setSuccess(result);
+};
 
 const urlStateDecoder = computed((): TrackListViewInputModel => {
   const pageParam = $route.params.page;
@@ -66,4 +152,24 @@ const trackListViewController = useTrackListViewController({
 watch($route, () => {
   trackListViewController.reload();
 });
+
+const radioPlay = () => {
+  const originalTrackId = $route.params.originalId as string;
+
+  radioService.setFilters({
+    originalTracks: [originalTrackId],
+  });
+
+  radioService.activate();
+};
+
+onMounted(() => {
+  _loadOriginalTrackInfo();
+});
 </script>
+
+<style scoped lang="scss">
+.body--dark .circle-info-card {
+  box-shadow: 0 0 0;
+}
+</style>

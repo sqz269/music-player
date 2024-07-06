@@ -2,6 +2,7 @@
   <q-item
     v-ripple
     clickable
+    @click="playTrack"
   >
     <q-item-section
       side
@@ -39,9 +40,15 @@
 <script setup lang="ts">
 import { defineProps } from 'vue';
 import { TrackReadDto } from 'app/backend-service-api';
+import { queueService } from 'src/services/_services';
 
 const props = defineProps<{
   index?: number;
   track: TrackReadDto;
 }>();
+
+// services
+const playTrack = () => {
+  queueService.addTrackById(props.track.id!);
+};
 </script>
