@@ -32,7 +32,6 @@ export * from './ThumbnailReadDto';
 export * from './TrackGetMultipleResp';
 export * from './TrackListResult';
 export * from './TrackOrderOptions';
-export * from './TrackRandomResult';
 export * from './TrackReadDto';
 export * from './TrackUpdateDto';
 export * from './TrackWriteDto';

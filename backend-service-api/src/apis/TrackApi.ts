@@ -19,7 +19,6 @@ import type {
   TrackGetMultipleResp,
   TrackListResult,
   TrackOrderOptions,
-  TrackRandomResult,
   TrackReadDto,
 } from '../models/index';
 import {
@@ -31,8 +30,6 @@ import {
     TrackListResultToJSON,
     TrackOrderOptionsFromJSON,
     TrackOrderOptionsToJSON,
-    TrackRandomResultFromJSON,
-    TrackRandomResultToJSON,
     TrackReadDtoFromJSON,
     TrackReadDtoToJSON,
 } from '../models/index';
@@ -44,7 +41,6 @@ export interface GetRandomSampleTrackRequest {
     circleIds?: Array<string>;
     originalAlbumIds?: Array<string>;
     originalTrackIds?: Array<string>;
-    seed?: string;
 }
 
 export interface GetTrackRequest {
@@ -74,7 +70,7 @@ export class TrackApi extends runtime.BaseAPI {
 
     /**
      */
-    async getRandomSampleTrackRaw(requestParameters: GetRandomSampleTrackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<TrackRandomResult>>> {
+    async getRandomSampleTrackRaw(requestParameters: GetRandomSampleTrackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<TrackReadDto>>> {
         const queryParameters: any = {};
 
         if (requestParameters['limit'] != null) {
@@ -101,10 +97,6 @@ export class TrackApi extends runtime.BaseAPI {
             queryParameters['OriginalTrackIds'] = requestParameters['originalTrackIds'];
         }
 
-        if (requestParameters['seed'] != null) {
-            queryParameters['seed'] = requestParameters['seed'];
-        }
-
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.accessToken) {
@@ -122,12 +114,12 @@ export class TrackApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(TrackRandomResultFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(TrackReadDtoFromJSON));
     }
 
     /**
      */
-    async getRandomSampleTrack(requestParameters: GetRandomSampleTrackRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<TrackRandomResult>> {
+    async getRandomSampleTrack(requestParameters: GetRandomSampleTrackRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<TrackReadDto>> {
         const response = await this.getRandomSampleTrackRaw(requestParameters, initOverrides);
         return await response.value();
     }

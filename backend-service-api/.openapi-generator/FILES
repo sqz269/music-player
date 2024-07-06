@@ -46,7 +46,6 @@ src/models/ThumbnailReadDto.ts
 src/models/TrackGetMultipleResp.ts
 src/models/TrackListResult.ts
 src/models/TrackOrderOptions.ts
-src/models/TrackRandomResult.ts
 src/models/TrackReadDto.ts
 src/models/TrackUpdateDto.ts
 src/models/TrackWriteDto.ts
