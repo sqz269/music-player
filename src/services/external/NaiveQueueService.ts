@@ -4,7 +4,7 @@ import QueueService, { QueueAddMode, RepeatMode } from '../domain/QueueService';
 import { computed, DeepReadonly, readonly, Ref, ref, watch } from 'vue';
 import Logger from 'src/utils/Logger';
 import ApiConfigurationProvider from '../domain/ApiConfigurationProvider';
-import { Configuration } from 'app/backend-service-api';
+import { Configuration, TrackApi } from 'app/backend-service-api';
 import { AlbumApi } from 'app/backend-service-api';
 import { TrackGetMultipleResp } from 'app/backend-service-api';
 import PlaylistService from '../domain/PlaylistService';
@@ -167,9 +167,9 @@ export default function useNaiveQueueService(
     // Fetch tracks from API
     let result: TrackGetMultipleResp;
     try {
-      const albumApi = new AlbumApi(_apiConfigProvider.getApiConfiguration());
+      const trackApi = new TrackApi(_apiConfigProvider.getApiConfiguration());
 
-      result = await albumApi.getTracks({
+      result = await trackApi.getTracks({
         requestBody: trackIds,
       });
     } catch (error) {

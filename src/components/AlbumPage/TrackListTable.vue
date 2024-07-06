@@ -65,6 +65,8 @@
               square
               v-for="prop in props.value"
               :key="prop.id"
+              clickable
+              @click="goToOriginalTrackPage(prop.id)"
             >
               {{ prop.title.en }}
             </q-chip>
@@ -127,12 +129,14 @@ import QueueService from 'src/services/domain/QueueService';
 import { inject, ref, TrackOpTypes } from 'vue';
 import { QueueAddMode } from 'src/services/domain/QueueService';
 import { UrlUtils } from 'src/utils/UrlUtils';
+import { useRouter } from 'vue-router';
 
 interface TrackListTableProps {
   tracks: Map<AlbumReadDto, TrackReadDto[]>;
 }
 
 // Injected services/data
+const $router = useRouter();
 const queueService = inject<QueueService>('queueService');
 
 const hoveringWhich = ref<number>();
@@ -189,7 +193,6 @@ const props = defineProps<TrackListTableProps>();
 const searchOnYouTube = (track: TrackReadDto) => {
   const albumObject: AlbumReadDto = props.tracks.keys().next().value;
 
-  console.dir(albumObject);
   const circleName = albumObject.albumArtist![0].name;
 
   UrlUtils.openUrlInNewTab(
@@ -197,5 +200,12 @@ const searchOnYouTube = (track: TrackReadDto) => {
       `"${track?.name?._default}" ${albumObject.name?._default} ${circleName}`
     )
   )
+};
+
+const goToOriginalTrackPage = (originalTrackId: string) => {
+  $router.push({
+    name: 'OriginalTrack',
+    params: { originalId: originalTrackId, page: 1 },
+  });
 };
 </script>

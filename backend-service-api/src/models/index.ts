@@ -30,6 +30,8 @@ export * from './ProblemDetails';
 export * from './SortOrder';
 export * from './ThumbnailReadDto';
 export * from './TrackGetMultipleResp';
+export * from './TrackListResult';
+export * from './TrackOrderOptions';
 export * from './TrackReadDto';
 export * from './TrackUpdateDto';
 export * from './TrackWriteDto';

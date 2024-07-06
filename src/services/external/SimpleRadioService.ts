@@ -1,10 +1,11 @@
 import { readonly, ref, watch } from 'vue';
 import QueueService, { QueueAddMode } from '../domain/QueueService';
-import RadioService, { RadioFilters } from '../domain/RadioService';
+import RadioService from '../domain/RadioService';
 import Logger from 'src/utils/Logger';
 import ApiConfigurationProvider from '../domain/ApiConfigurationProvider';
-import { Configuration, TrackReadDto } from 'app/backend-service-api';
+import { Configuration, TrackApi, TrackReadDto } from 'app/backend-service-api';
 import { AlbumApi } from 'app/backend-service-api';
+import { TrackQueryFilters } from 'src/models/TrackQueryFilters';
 
 export default function useSimpleRadioService(
   queueService: QueueService,
@@ -18,7 +19,7 @@ export default function useSimpleRadioService(
   const _isActive = ref(false);
   const isActive = readonly(_isActive);
 
-  const _filters = ref<RadioFilters | null>(null);
+  const _filters = ref<TrackQueryFilters | null>(null);
   const filters = readonly(_filters);
 
   const initialize = async () => {
@@ -37,7 +38,7 @@ export default function useSimpleRadioService(
 
   const _getSampleTrack = async (): Promise<TrackReadDto[]> => {
     _logger.debug('Getting random sample track');
-    const albumApi = new AlbumApi(
+    const trackApi = new TrackApi(
       _apiConfigProvider.getApiConfigurationWithAuth()
     );
 
@@ -51,7 +52,7 @@ export default function useSimpleRadioService(
       originalTrackIds,
     });
 
-    const tracks = await albumApi.getRandomSampleTrack({
+    const tracks = await trackApi.getRandomSampleTrack({
       releaseDateBegin: filters.value?.releaseDateBegin || undefined,
       releaseDateEnd: filters.value?.releaseDateEnd || undefined,
       circleIds,
@@ -111,7 +112,7 @@ export default function useSimpleRadioService(
     await _onRadioDeactivated();
   };
 
-  const setFilters = async (filters: RadioFilters | null) => {
+  const setFilters = async (filters: TrackQueryFilters | null) => {
     // Set the filters for the radio service
     _logger.debug('Setting radio filters');
     _logger.debug('New filters: ', filters);

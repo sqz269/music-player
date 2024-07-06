@@ -10,6 +10,7 @@ src/apis/InternalApi.ts
 src/apis/OriginalAlbumApi.ts
 src/apis/PlaylistApi.ts
 src/apis/PlaylistItemsApi.ts
+src/apis/TrackApi.ts
 src/apis/UserProfileApi.ts
 src/apis/index.ts
 src/index.ts
@@ -43,6 +44,8 @@ src/models/ProblemDetails.ts
 src/models/SortOrder.ts
 src/models/ThumbnailReadDto.ts
 src/models/TrackGetMultipleResp.ts
+src/models/TrackListResult.ts
+src/models/TrackOrderOptions.ts
 src/models/TrackReadDto.ts
 src/models/TrackUpdateDto.ts
 src/models/TrackWriteDto.ts
