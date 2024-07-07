@@ -38,6 +38,7 @@ import {
 } from '../models/index';
 
 export interface GetRandomSampleTrackRequest {
+    start?: number;
     limit?: number;
     releaseDateBegin?: Date;
     releaseDateEnd?: Date;
@@ -76,6 +77,10 @@ export class TrackApi extends runtime.BaseAPI {
      */
     async getRandomSampleTrackRaw(requestParameters: GetRandomSampleTrackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TrackRandomResult>> {
         const queryParameters: any = {};
+
+        if (requestParameters['start'] != null) {
+            queryParameters['start'] = requestParameters['start'];
+        }
 
         if (requestParameters['limit'] != null) {
             queryParameters['limit'] = requestParameters['limit'];
