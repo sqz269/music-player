@@ -3,7 +3,7 @@ import QueueService, { QueueAddMode } from '../domain/QueueService';
 import RadioService from '../domain/RadioService';
 import Logger from 'src/utils/Logger';
 import ApiConfigurationProvider from '../domain/ApiConfigurationProvider';
-import { Configuration, TrackApi, TrackReadDto } from 'app/backend-service-api';
+import { Configuration, TrackApi, TrackRandomResult, TrackReadDto } from 'app/backend-service-api';
 import { AlbumApi } from 'app/backend-service-api';
 import { TrackQueryFilters } from 'src/models/TrackQueryFilters';
 
@@ -22,6 +22,12 @@ export default function useSimpleRadioService(
   const _filters = ref<TrackQueryFilters | null>(null);
   const filters = readonly(_filters);
 
+  const _seed = ref<string | undefined>(undefined);
+  const seed = readonly(_seed);
+
+  // Internal tracker for offset
+  const _offset = ref(0);
+
   const initialize = async () => {
     _logger.debug('Initializing SimpleRadioService');
     watch(_queueService.currentIndex, _onCurrentlyPlayingChanged);
@@ -36,7 +42,7 @@ export default function useSimpleRadioService(
     _logger.debug('SimpleRadioService initialized');
   };
 
-  const _getSampleTrack = async (): Promise<TrackReadDto[]> => {
+  const _getSampleTrack = async (): Promise<TrackRandomResult> => {
     _logger.debug('Getting random sample track');
     const trackApi = new TrackApi(
       _apiConfigProvider.getApiConfigurationWithAuth()
@@ -46,28 +52,39 @@ export default function useSimpleRadioService(
     const originalAlbumIds = _filters.value?.originalAlbums?.length ? _filters.value.originalAlbums : undefined;
     const originalTrackIds = _filters.value?.originalTracks?.length ? _filters.value.originalTracks : undefined;
 
-    console.log('Getting random sample track', {
-      circleIds,
-      originalAlbumIds,
-      originalTrackIds,
-    });
-
-    const tracks = await trackApi.getRandomSampleTrack({
+    const results = await trackApi.getRandomSampleTrack({
       releaseDateBegin: filters.value?.releaseDateBegin || undefined,
       releaseDateEnd: filters.value?.releaseDateEnd || undefined,
       circleIds,
       originalAlbumIds,
       originalTrackIds,
       limit: 10,
+      start: _offset.value,
+      seed: _seed.value,
     });
 
-    return tracks;
+    // If we had no seed specified, use the result's seed
+    if (!_seed.value) {
+      _seed.value = results.seed;
+    }
+
+    if (results.total === 0) {
+      _logger.warn('No tracks found for the given filters');
+      return results;
+    }
+
+    _logger.debug('Sample track result: ', results);
+
+    _offset.value += 10;
+
+    return results;
   }
 
   const _loadMoreTracks = async () => {
     _logger.debug('Loading more tracks for radio, filters: ', filters.value);
 
-    const tracks = await _getSampleTrack();
+    const result = await _getSampleTrack();
+    const tracks = result.tracks || [];
     const trackIds = tracks.map((track) => track.id!);
 
     if (trackIds.length > 0) {
@@ -96,6 +113,12 @@ export default function useSimpleRadioService(
     // Handle the radio deactivation
     _logger.debug('Radio deactivated');
     _queueService.removeTracksByGroup('radio', true);
+
+    // Reset offset
+    _offset.value = 0;
+
+    // Reset seed
+    _seed.value = undefined;
   };
 
   const activate = async () => {
@@ -116,6 +139,11 @@ export default function useSimpleRadioService(
     // Set the filters for the radio service
     _logger.debug('Setting radio filters');
     _logger.debug('New filters: ', filters);
+
+    // Reset seed and offset
+    _seed.value = undefined;
+    _offset.value = 0;
+
     _filters.value = filters;
   };
 
@@ -130,6 +158,7 @@ export default function useSimpleRadioService(
   return {
     isActive,
     filters,
+    seed,
     initialize,
     activate,
     deactivate,
