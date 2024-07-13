@@ -74,46 +74,10 @@
         </template>
 
         <template v-slot:body-cell="props">
-          <q-td :props="props">
+          <q-td>
             {{ props.value }}
           </q-td>
-          <q-menu context-menu>
-            <q-list style="min-width: 150px">
-              <q-item
-                clickable
-                v-close-popup
-                @click="queueService?.addTrackById(props.key, QueueAddMode.APPEND_NEXT)"
-              >
-                <q-item-section>Play Next</q-item-section>
-              </q-item>
-              <q-item
-                clickable
-                v-close-popup
-              >
-                <q-item-section>Add to Queue</q-item-section>
-              </q-item>
-
-              <q-item
-                clickable
-                v-close-popup
-              >
-                <q-item-section>Copy Track Url</q-item-section>
-              </q-item>
-              <q-item
-                clickable
-                v-close-popup
-              >
-                <q-item-section>View Metadata</q-item-section>
-              </q-item>
-              <q-item
-                clickable
-                @click="searchOnYouTube(props.row)"
-                v-close-popup
-              >
-                <q-item-section>Search On YouTube</q-item-section>
-              </q-item>
-            </q-list>
-          </q-menu>
+          <TrackMenu :options="trackMenuOptionsCreator(props.row, disc)"></TrackMenu>
         </template>
       </q-table>
     </div>
@@ -128,8 +92,9 @@ import { Duration } from 'src/models/Duration';
 import QueueService from 'src/services/domain/QueueService';
 import { inject, ref, TrackOpTypes } from 'vue';
 import { QueueAddMode } from 'src/services/domain/QueueService';
-import { UrlUtils } from 'src/utils/UrlUtils';
 import { useRouter } from 'vue-router';
+import TrackMenu from '../MenuOptions/TrackMenuOptionsBuilder/TrackMenu.vue';
+import TrackMenuOptionsBuilder from '../MenuOptions/TrackMenuOptionsBuilder/TrackMenuOptionBuilder';
 
 interface TrackListTableProps {
   tracks: Map<AlbumReadDto, TrackReadDto[]>;
@@ -140,6 +105,14 @@ const $router = useRouter();
 const queueService = inject<QueueService>('queueService');
 
 const hoveringWhich = ref<number>();
+
+// Menu options
+const trackMenuOptionsCreator = (track: TrackReadDto, album: AlbumReadDto) =>
+  new TrackMenuOptionsBuilder(track, album)
+    .addPlayNextOption()
+    .addAddToQueueOption()
+    .addSearchOnYoutubeOption()
+    .build();
 
 const pagination = {
   rowsPerPage: 0,
@@ -189,18 +162,6 @@ const columns = [
 ];
 
 const props = defineProps<TrackListTableProps>();
-
-const searchOnYouTube = (track: TrackReadDto) => {
-  const albumObject: AlbumReadDto = props.tracks.keys().next().value;
-
-  const circleName = albumObject.albumArtist![0].name;
-
-  UrlUtils.openUrlInNewTab(
-    UrlUtils.constructYouTubeSearchQuery(
-      `"${track?.name?._default}" ${albumObject.name?._default} ${circleName}`
-    )
-  )
-};
 
 const goToOriginalTrackPage = (originalTrackId: string) => {
   $router.push({

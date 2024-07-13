@@ -4,6 +4,8 @@
     clickable
     @click="playTrack"
   >
+    <TrackMenu :options="trackMenuOptions" />
+
     <q-item-section
       side
       class='items-center'
@@ -41,6 +43,10 @@
 import { defineProps } from 'vue';
 import { TrackReadDto } from 'app/backend-service-api';
 import { queueService } from 'src/services/_services';
+import { QueueAddMode } from 'src/services/domain/QueueService';
+import TrackMenuOptionsBuilder from '../MenuOptions/TrackMenuOptionsBuilder/TrackMenuOptionBuilder';
+import ITrackMenuOption from '../MenuOptions/TrackMenuOptionsBuilder/ITrackMenuOption';
+import TrackMenu from '../MenuOptions/TrackMenuOptionsBuilder/TrackMenu.vue';
 
 const props = defineProps<{
   index?: number;
@@ -49,6 +55,17 @@ const props = defineProps<{
 
 // services
 const playTrack = () => {
-  queueService.addTrackById(props.track.id!);
+  queueService.addTrackById(props.track.id!, QueueAddMode.PLAY_IMMEDIATELY);
 };
+
+// Menu options
+const trackMenuOptions: ITrackMenuOption[] =
+  new TrackMenuOptionsBuilder(props.track, props.track.album!)
+    .addPlayNextOption()
+    .addAddToQueueOption()
+    .addViewAlbumOption()
+    .addViewCircleOption()
+    .addSearchOnYoutubeOption()
+    .build();
+
 </script>

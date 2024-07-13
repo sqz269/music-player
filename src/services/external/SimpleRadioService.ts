@@ -31,14 +31,6 @@ export default function useSimpleRadioService(
   const initialize = async () => {
     _logger.debug('Initializing SimpleRadioService');
     watch(_queueService.currentIndex, _onCurrentlyPlayingChanged);
-    watch(_isActive, (newValue) => {
-      if (newValue) {
-        _onRadioActivated();
-      } else {
-        _onRadioDeactivated();
-      }
-    });
-
     _logger.debug('SimpleRadioService initialized');
   };
 

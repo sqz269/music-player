@@ -5,43 +5,6 @@
     </template>
 
     <template #default="{ data }">
-      <q-menu
-        context-menu
-        fit
-      >
-        <q-list>
-          <q-item
-            clickable
-            v-close-popup
-          >
-            <q-item-section>Play Next</q-item-section>
-          </q-item>
-          <q-item
-            clickable
-            v-close-popup
-          >
-            <q-item-section>Add to Queue</q-item-section>
-          </q-item>
-          <q-item
-            clickable
-            v-close-popup
-          >
-            <q-item-section>Copy Track Url</q-item-section>
-          </q-item>
-          <q-item
-            clickable
-            v-close-popup
-          >
-            <q-item-section>View Metadata</q-item-section>
-          </q-item>
-          <q-item
-            clickable
-            v-close-popup
-          >
-            <q-item-section>Search On YouTube</q-item-section>
-          </q-item>
-        </q-list>
-      </q-menu>
       <q-card class="q-ma-md circle-info-card">
         <q-card-section>
           <div class="text-h6">
