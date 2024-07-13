@@ -1,0 +1,10 @@
+class UrlUtils {
+  static openUrlInNewTab(url) {
+    window.open(url, "_blank");
+  }
+  static constructYouTubeSearchQuery(query) {
+    return `https://www.youtube.com/results?search_query=${query}`;
+  }
+}
+export { UrlUtils as U };
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiVXJsVXRpbHMuZGExODBjY2EuanMiLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy91dGlscy9VcmxVdGlscy50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgY2xhc3MgVXJsVXRpbHMge1xuICBzdGF0aWMgb3BlblVybEluTmV3VGFiKHVybDogc3RyaW5nKTogdm9pZCB7XG4gICAgd2luZG93Lm9wZW4odXJsLCAnX2JsYW5rJyk7XG4gIH1cblxuICBzdGF0aWMgY29uc3RydWN0WW91VHViZVNlYXJjaFF1ZXJ5KHF1ZXJ5OiBzdHJpbmcpOiBzdHJpbmcge1xuICAgIHJldHVybiBgaHR0cHM6Ly93d3cueW91dHViZS5jb20vcmVzdWx0cz9zZWFyY2hfcXVlcnk9JHtxdWVyeX1gO1xuICB9XG59XG4iXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQU8sTUFBTSxTQUFTO0FBQUEsRUFDcEIsT0FBTyxnQkFBZ0IsS0FBbUI7QUFDakMsV0FBQSxLQUFLLEtBQUssUUFBUTtBQUFBLEVBQzNCO0FBQUEsRUFFQSxPQUFPLDRCQUE0QixPQUF1QjtBQUN4RCxXQUFPLGdEQUFnRDtBQUFBLEVBQ3pEO0FBQ0Y7OyJ9
