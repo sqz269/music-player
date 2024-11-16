@@ -34,6 +34,7 @@ export * from './TrackListResult';
 export * from './TrackOrderOptions';
 export * from './TrackRandomResult';
 export * from './TrackReadDto';
+export * from './TrackStratificationMode';
 export * from './TrackUpdateDto';
 export * from './TrackWriteDto';
 export * from './UserProfile';

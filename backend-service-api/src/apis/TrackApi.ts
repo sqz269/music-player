@@ -21,6 +21,7 @@ import type {
   TrackOrderOptions,
   TrackRandomResult,
   TrackReadDto,
+  TrackStratificationMode,
 } from '../models/index';
 import {
     SortOrderFromJSON,
@@ -35,11 +36,14 @@ import {
     TrackRandomResultToJSON,
     TrackReadDtoFromJSON,
     TrackReadDtoToJSON,
+    TrackStratificationModeFromJSON,
+    TrackStratificationModeToJSON,
 } from '../models/index';
 
 export interface GetRandomSampleTrackRequest {
     start?: number;
     limit?: number;
+    stratificationMode?: TrackStratificationMode;
     releaseDateBegin?: Date;
     releaseDateEnd?: Date;
     circleIds?: Array<string>;
@@ -84,6 +88,10 @@ export class TrackApi extends runtime.BaseAPI {
 
         if (requestParameters['limit'] != null) {
             queryParameters['limit'] = requestParameters['limit'];
+        }
+
+        if (requestParameters['stratificationMode'] != null) {
+            queryParameters['stratificationMode'] = requestParameters['stratificationMode'];
         }
 
         if (requestParameters['releaseDateBegin'] != null) {
