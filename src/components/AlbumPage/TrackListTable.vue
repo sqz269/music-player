@@ -74,8 +74,10 @@
         </template>
 
         <template v-slot:body-cell="props">
-          <q-td>
-            {{ props.value }}
+          <q-td :props="props">
+            {{
+              props.value
+            }}
           </q-td>
           <TrackMenu :options="trackMenuOptionsCreator(props.row, disc)"></TrackMenu>
         </template>

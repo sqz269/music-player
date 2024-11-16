@@ -165,6 +165,38 @@
 
                 <q-separator class="full-width q-ma-md" />
 
+                <div class="row items-center">
+                  <div class="q-pa-sm">
+                    <q-btn
+                      round
+                      color="primary"
+                      icon="info"
+                      padding="none"
+                      @click="showStratificationInfo"
+                    />
+                  </div>
+                  <q-select
+                    class="col"
+                    label="Stratification"
+                    filled
+                    v-model="filters.stratificationMode"
+                    :options="stratificationOptions"
+                  >
+                  <template v-slot:option="scope">
+                    <q-item v-bind="scope.itemProps">
+                      <q-item-section>
+                        {{ scope.opt.label }}
+                      </q-item-section>
+                      <q-item-section side>
+                        {{ scope.opt.tooltip }}
+                      </q-item-section>
+                    </q-item>
+                    </template>
+                  </q-select>
+                </div>
+
+                <q-separator class="full-width q-ma-md" />
+
                 <q-btn
                   label="Apply Radio Settings"
                   color="primary"
@@ -220,22 +252,26 @@ import { CircleReadDto, OriginalAlbumReadDto, OriginalTrackReadDto } from 'app/b
 import GlobalStaticDataProvider from 'src/services/domain/GlobalStaticDataProvider';
 import RadioService from 'src/services/domain/RadioService';
 import { useCombinedLoadableAwaiter } from 'src/utils/Loadable/CombinedLoadableAwaiter';
-import { inject, reactive, Ref, ref, watch, toRaw, onMounted } from 'vue';
+import { inject, reactive, ref, watch, toRaw, onMounted } from 'vue';
 import LoadableElement from 'src/utils/Loadable/LoadableElement.vue';
 import { LoadingStatus } from 'src/utils/Loadable/LoadableController';
 import { TrackQueryFilters } from 'src/models/TrackQueryFilters';
-
+import { TrackStratificationMode } from 'app/backend-service-api/src';
+import { useQuasar } from 'quasar';
+import StratificationModeHelpDialog from 'src/components/Dialogs/StratificationModeHelpDialog.vue';
 interface RadioPageFilters {
   releaseDateEnd: string | null;
   releaseDateBegin: string | null;
   circles: SelectOptions[];
   originalAlbums: SelectOptions[];
   originalTracks: TrackSelectOptions[];
+  stratificationMode: TrackStratificationMode;
 }
 
 // Inject services
 const radioService = inject<RadioService>('radioService');
 const staticData = inject<GlobalStaticDataProvider>('globalStaticDataProvider');
+const $q = useQuasar();
 
 const startRadio = () => {
   radioService?.toggle();
@@ -255,6 +291,7 @@ const filters = reactive<RadioPageFilters>({
   circles: [] as SelectOptions[],
   originalAlbums: [] as SelectOptions[],
   originalTracks: [] as TrackSelectOptions[],
+  stratificationMode: TrackStratificationMode.None,
 });
 
 const toRadioFilters = (): TrackQueryFilters => {
@@ -269,6 +306,7 @@ const toRadioFilters = (): TrackQueryFilters => {
     circles: raw.circles.map((c) => c.key),
     originalAlbums: raw.originalAlbums.map((oa) => oa.key),
     originalTracks: raw.originalTracks.flatMap((ot) => ot.aliasPks),
+    stratificationMode: raw.stratificationMode,
   };
 };
 
@@ -291,12 +329,25 @@ const fromRadioFilters = (radioFilters: TrackQueryFilters): RadioPageFilters => 
     circles,
     originalAlbums,
     originalTracks,
+    stratificationMode: radioFilters.stratificationMode ?? TrackStratificationMode.None,
   };
 };
 
 const applyRadioSettings = () => {
   radioService?.setFilters(toRadioFilters());
 };
+
+const showStratificationInfo = () => {
+  $q.dialog({
+    component: StratificationModeHelpDialog,
+  });
+};
+
+const stratificationOptions = [
+  { label: 'None', value: TrackStratificationMode.None, tooltip: 'No stratification' },
+  { label: 'Album', value: TrackStratificationMode.Album, tooltip: 'Equal number of tracks per album' },
+  { label: 'Circle', value: TrackStratificationMode.Circle, tooltip: 'Equal number of tracks per circle' },
+];
 
 interface SelectOptions {
   key: string;
