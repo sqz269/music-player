@@ -12,7 +12,7 @@
 }
 
 .bg-filter-blur-10 {
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(15px);
 }
 
 .bg-transparent {
@@ -24,15 +24,15 @@
 }
 
 .body--dark .q-menu {
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(15px);
   background-color: rgba($dark, 0.7);
   box-shadow: rgba($primary, 0.5) 0 0 10px;
   border: 1px solid rgba($primary, 0.5);
 }
 
 .body--light .q-menu {
-  backdrop-filter: blur(10px);
-  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(15px);
+  background-color: rgba(255, 255, 255, 0.8);
   box-shadow: rgba($primary, 0.5) 0 0 10px;
   border: 1px solid rgba($primary, 0.5);
 }
