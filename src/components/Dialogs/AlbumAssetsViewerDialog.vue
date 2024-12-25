@@ -139,8 +139,6 @@ const albumAssets = computed(() => {
 });
 
 const previewAsset = (asset: AssetReadDto) => {
-  console.log('Preview asset', asset);
-
   $q.dialog({
     component: AssetPreviewDialog,
     componentProps: {
