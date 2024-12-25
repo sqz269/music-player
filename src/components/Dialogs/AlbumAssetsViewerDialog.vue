@@ -21,49 +21,77 @@
           flat
           hide-bottom
         >
-          <template v-slot:body-cell-actions="props">
-            <q-td class="row flex justify-center items-center">
-              <q-btn-dropdown
-                flat
-                no-icon-animation
-                :dropdown-icon="outlinedMenu"
+          <template v-slot:body="props">
+            <q-tr :props="props">
+              <q-td
+                key="id"
+                :props="props"
               >
-                <q-list>
+                {{ props.row.id }}
+              </q-td>
+              <q-td
+                key="name"
+                :props="props"
+              >
+                {{ props.row.name }}
+              </q-td>
+
+              <q-td
+                key="size"
+                :props="props"
+              >
+                {{ (props.row.size / 1024 / 1024).toFixed(2) }}
+              </q-td>
+
+              <q-td
+                key="mime-type"
+                :props="props"
+              >
+                {{ props.row.mime }}
+              </q-td>
+
+              <q-menu touch-position>
+                <q-list style="min-width: 100px">
                   <q-item
                     clickable
                     v-close-popup
-                    @click="donwloadAsset(props.row)"
+                    @click="previewAsset(props.row)"
                   >
                     <q-item-section avatar>
-                      <q-avatar
-                        :icon="matFileDownload"
-                        size="md"
-                      />
+                      <q-avatar :icon=matPreview />
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label>Preview</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                  <q-item
+                    clickable
+                    v-close-popup
+                    @click="AssetUtils.openAssetInNewTab(props.row)"
+                  >
+                    <q-item-section avatar>
+                      <q-avatar :icon=matOpenInNew />
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label>Open in new tab</q-item-label>
+                    </q-item-section>
+                  </q-item>
+
+                  <q-item
+                    clickable
+                    v-close-popup
+                    @click="AssetUtils.downloadAsset(props.row)"
+                  >
+                    <q-item-section avatar>
+                      <q-avatar :icon=matFileDownload />
                     </q-item-section>
                     <q-item-section>
                       <q-item-label>Download</q-item-label>
                     </q-item-section>
                   </q-item>
-
-                  <q-item
-                    clickable
-                    v-close-popup
-                    @click="copyAssetUrl(props.row)"
-                  >
-                    <q-item-section avatar>
-                      <q-avatar
-                        :icon="matContentCopy"
-                        size="md"
-                      />
-                    </q-item-section>
-                    <q-item-section>
-                      <q-item-label>Copy URL</q-item-label>
-                    </q-item-section>
-                  </q-item>
                 </q-list>
-              </q-btn-dropdown>
-
-            </q-td>
+              </q-menu>
+            </q-tr>
           </template>
         </q-table>
       </q-card-section>
@@ -72,9 +100,7 @@
         class="q-pb-none"
         v-else
       >
-        <q-card-main>
-          <q-markup value="No assets found." />
-        </q-card-main>
+        <div class="text-h6 text-center">No assets found</div>
       </q-card-section>
 
       <q-card-actions align="right">
@@ -90,15 +116,17 @@
 
 <script setup lang="ts">
 import {
-  outlinedMenu,
-} from '@quasar/extras/material-icons-outlined';
-import {
   matFileDownload,
-  matContentCopy,
+  matPreview,
+  matOpenInNew
 } from '@quasar/extras/material-icons';
 import { AlbumReadDto, AssetReadDto } from 'app/backend-service-api/dist';
-import { QDialog } from 'quasar';
+import { QDialog, useQuasar } from 'quasar';
 import { computed } from 'vue';
+import AssetPreviewDialog from './AssetPreviewDialog.vue';
+import AssetUtils from 'src/utils/AssetUtils';
+
+const $q = useQuasar();
 
 interface AlbumAssetsViewerDialogProps {
   album: AlbumReadDto;
@@ -110,24 +138,15 @@ const albumAssets = computed(() => {
   return props.album.otherFiles!;
 });
 
-const donwloadAsset = (asset: AssetReadDto) => {
-  console.log('Download asset', asset);
+const previewAsset = (asset: AssetReadDto) => {
+  console.log('Preview asset', asset);
 
-  const a = document.createElement('a');
-  a.href = asset.url!;
-  a.target = '_blank';
-  a.click();
-};
-
-const copyAssetUrl = (asset: AssetReadDto) => {
-  console.log('Copy asset URL', asset);
-
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(asset.url!);
-  }
-  else {
-    console.error('Clipboard API not available');
-  }
+  $q.dialog({
+    component: AssetPreviewDialog,
+    componentProps: {
+      asset
+    }
+  });
 };
 
 const tableColumns = [
@@ -155,10 +174,6 @@ const tableColumns = [
     label: 'Content Type',
     align: 'center',
     field: (row: AssetReadDto) => row.mime
-  },
-  {
-    name: 'actions',
-    label: 'Actions', align: 'center'
   }
 ];
 </script>
