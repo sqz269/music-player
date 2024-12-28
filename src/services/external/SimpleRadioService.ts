@@ -52,6 +52,7 @@ export default function useSimpleRadioService(
       originalTrackIds,
       limit: 10,
       start: _offset.value,
+      stratificationMode: filters.value?.stratificationMode || undefined,
       seed: _seed.value,
     });
 
